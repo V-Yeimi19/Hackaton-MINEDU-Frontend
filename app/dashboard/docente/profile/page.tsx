@@ -13,7 +13,7 @@ export default async function DocenteProfilePage() {
   const token = await getServerToken();
   if (!token) redirect("/login");
 
-  const user = await usersApi.getUser(sessionUser.id, token);
+  const user = await usersApi.getMe(token);
 
   const roleLabels: Record<string, string> = {
     ADMIN: "Administrador",
