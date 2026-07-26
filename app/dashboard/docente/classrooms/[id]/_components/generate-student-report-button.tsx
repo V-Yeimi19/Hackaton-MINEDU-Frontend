@@ -50,7 +50,7 @@ export function GenerateStudentReportButton({
   }
 
   return (
-    <div className="relative">
+    <>
       <Button
         variant="secondary"
         className="px-3 py-1.5 text-label-md"
@@ -59,8 +59,12 @@ export function GenerateStudentReportButton({
         Reporte PDF
       </Button>
 
+      {/* En vez de un popover con position:absolute (quedaba atrapado por el
+          stacking context propio de cada GlassCard/isolation:isolate y se
+          renderizaba debajo de la siguiente sección) este panel se muestra en
+          flujo normal, empujando el contenido en vez de flotar sobre él. */}
       {open && (
-        <div className="absolute right-0 top-full z-10 mt-2 w-72 rounded-lg border border-outline-variant bg-surface-container-lowest p-4 shadow-lg">
+        <div className="mt-3 w-full basis-full rounded-lg border border-outline-variant bg-surface-container-lowest p-4">
           <div className="flex flex-col gap-3">
             <div>
               <p className="text-label-md text-on-surface-variant mb-1">Desde</p>
@@ -90,6 +94,6 @@ export function GenerateStudentReportButton({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

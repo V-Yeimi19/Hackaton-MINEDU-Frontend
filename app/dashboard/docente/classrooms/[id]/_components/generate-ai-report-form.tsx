@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button, FieldError, Input } from "@/components/ui/form";
-import { GlassCard } from "@/components/ui/glass-card";
 import { aiApi } from "@/lib/api";
 import { getClientToken } from "@/lib/api/token";
 import type { GenerateAiReportResponse } from "@/lib/api/schemas/ai";
@@ -95,12 +94,12 @@ export function GenerateAiReportForm({ classroomId }: { classroomId: string }) {
       <FieldError message={error} />
 
       {result && (
-        <>
-          <GlassCard>
+        <div className="flex flex-col gap-4 border-t border-outline-variant pt-4">
+          <div>
             <h3 className="text-label-md uppercase tracking-wide text-on-surface-variant">
               Resumen de asistencia
             </h3>
-            <div className="mt-2 flex gap-4">
+            <div className="mt-2 flex flex-wrap gap-4">
               {Object.entries(result.attendanceSummary).map(([key, value]) => (
                 <div key={key}>
                   <p className="text-body-lg font-medium text-on-surface">{String(value)}</p>
@@ -108,13 +107,13 @@ export function GenerateAiReportForm({ classroomId }: { classroomId: string }) {
                 </div>
               ))}
             </div>
-          </GlassCard>
+          </div>
 
-          <GlassCard>
+          <div className="border-t border-outline-variant pt-4">
             <h3 className="text-label-md uppercase tracking-wide text-on-surface-variant">
               Resumen de notas
             </h3>
-            <div className="mt-2 flex gap-4">
+            <div className="mt-2 flex flex-wrap gap-4">
               {Object.entries(result.gradeSummary).map(([key, value]) => (
                 <div key={key}>
                   <p className="text-body-lg font-medium text-on-surface">{String(value)}</p>
@@ -122,10 +121,10 @@ export function GenerateAiReportForm({ classroomId }: { classroomId: string }) {
                 </div>
               ))}
             </div>
-          </GlassCard>
+          </div>
 
           {result.anomalies.length > 0 && (
-            <GlassCard>
+            <div className="border-t border-outline-variant pt-4">
               <h3 className="text-label-md uppercase tracking-wide text-tertiary">
                 Anomalías detectadas
               </h3>
@@ -136,9 +135,9 @@ export function GenerateAiReportForm({ classroomId }: { classroomId: string }) {
                   </li>
                 ))}
               </ul>
-            </GlassCard>
+            </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

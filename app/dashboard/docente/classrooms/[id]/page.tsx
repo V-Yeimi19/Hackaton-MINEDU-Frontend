@@ -151,7 +151,7 @@ export default async function ClassroomDetailPage({
             {roster.map((enrollment) => (
               <li
                 key={enrollment.id}
-                className="flex items-center justify-between rounded-md border border-outline-variant px-4 py-2"
+                className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-outline-variant px-4 py-2"
               >
                 <span className="text-body-md text-on-surface">{enrollment.student.fullName}</span>
                 <div className="flex items-center gap-2">

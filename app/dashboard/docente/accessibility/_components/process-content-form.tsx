@@ -62,11 +62,12 @@ export function ProcessContentForm() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-        <div className="flex-1">
+        <div className="flex-1 min-w-xs">
           <Input
             type="file"
             accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg"
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            placeholder="Seleccionar archivo"
           />
         </div>
         <Select
@@ -189,18 +190,18 @@ export function ProcessContentForm() {
             </div>
           )}
 
-          {job.pictogramData && (
+          {job.pictogramData && job.pictogramData.length > 0 && (
             <div>
               <p className="text-label-md uppercase tracking-wide text-on-surface-variant">
                 Pictogramas ARASAAC
               </p>
               <div className="mt-1 flex flex-wrap gap-2">
-                {Object.entries(job.pictogramData).map(([keyword, url]) => (
+                {job.pictogramData.map((pictogram) => (
                   <span
-                    key={keyword}
+                    key={pictogram.arasaacId}
                     className="rounded-full bg-primary-container/25 px-3 py-1 text-label-md text-on-primary-container"
                   >
-                    {keyword}
+                    {pictogram.keyword}
                   </span>
                 ))}
               </div>
