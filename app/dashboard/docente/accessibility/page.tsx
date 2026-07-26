@@ -14,7 +14,7 @@ export default async function AccessibilityPage() {
       <GlassCard>
         <h2 className="text-body-lg font-medium text-on-surface">Procesar contenido educativo</h2>
         <p className="mt-1 text-body-md text-on-surface-variant">
-          Sube un archivo (PDF, imagen, documento) para adaptarlo con OCR, generar audio con voz,
+          Sube un archivo (PDF) para adaptarlo con OCR, generar audio con voz,
           subtítulos, pictogramas ARASAAC y fichas didácticas personalizadas.
         </p>
         <div className="mt-4">
