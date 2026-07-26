@@ -9,12 +9,26 @@ export const studentIndicatorSchema = z.object({
   gradeCount: z.number(),
   competencyScore: z.number(),
   competencyCount: z.number(),
-  lastCalculatedAt: z.string(),
+  updatedAt: z.string(),
 });
 export type StudentIndicator = z.infer<typeof studentIndicatorSchema>;
 
-export const riskLevelSchema = z.enum(["BAJO", "MEDIO", "ALTO", "CRITICO"]);
+// Prisma RiskLevel (analytics_db): NONE | LOW | MEDIUM | HIGH — no son los valores en español.
+export const riskLevelSchema = z.enum(["NONE", "LOW", "MEDIUM", "HIGH"]);
 export type RiskLevel = z.infer<typeof riskLevelSchema>;
+
+// Prisma RecommendationStatus (analytics_db): PENDING | SENT | DISMISSED.
+export const recommendationStatusSchema = z.enum(["PENDING", "SENT", "DISMISSED"]);
+export type RecommendationStatus = z.infer<typeof recommendationStatusSchema>;
+
+export const twinRecommendationSchema = z.object({
+  id: z.string(),
+  type: z.string(),
+  message: z.string(),
+  source: z.string(),
+  status: recommendationStatusSchema,
+});
+export type TwinRecommendation = z.infer<typeof twinRecommendationSchema>;
 
 export const studentTwinSnapshotSchema = z.object({
   studentId: z.string(),
@@ -24,7 +38,7 @@ export const studentTwinSnapshotSchema = z.object({
   competencyScore: z.number(),
   riskLevel: riskLevelSchema,
   riskReasons: z.array(z.string()),
-  recommendations: z.array(z.string()),
+  recommendations: z.array(twinRecommendationSchema),
   lastUpdated: z.string(),
 });
 export type StudentTwinSnapshot = z.infer<typeof studentTwinSnapshotSchema>;
@@ -36,9 +50,6 @@ export const classroomTwinResponseSchema = z.object({
   students: z.array(studentTwinSnapshotSchema),
 });
 export type ClassroomTwinResponse = z.infer<typeof classroomTwinResponseSchema>;
-
-export const recommendationStatusSchema = z.enum(["ACTIVE", "DISMISSED"]);
-export type RecommendationStatus = z.infer<typeof recommendationStatusSchema>;
 
 export const recommendationSchema = z.object({
   id: z.string(),

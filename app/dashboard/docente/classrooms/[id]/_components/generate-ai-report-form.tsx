@@ -132,7 +132,7 @@ export function GenerateAiReportForm({ classroomId }: { classroomId: string }) {
               <ul className="mt-2 list-inside list-disc">
                 {result.anomalies.map((a, i) => (
                   <li key={i} className="text-body-md text-on-surface">
-                    {a}
+                    {a.message}
                   </li>
                 ))}
               </ul>

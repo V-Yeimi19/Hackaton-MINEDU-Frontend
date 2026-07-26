@@ -3,11 +3,12 @@ import { analyticsApi, classroomApi } from "@/lib/api";
 import { GlassCard } from "@/components/ui/glass-card";
 import { DismissRecommendationButton } from "./_components/dismiss-recommendation-button";
 
+// Prisma RiskLevel real (analytics_db): NONE | LOW | MEDIUM | HIGH.
 const RISK_STYLES: Record<string, string> = {
-  BAJO: "bg-primary-container/25 text-on-primary-container",
-  MEDIO: "bg-tertiary-container/25 text-tertiary",
-  ALTO: "bg-error/20 text-error",
-  CRITICO: "bg-error text-on-error",
+  NONE: "bg-primary-container/25 text-on-primary-container",
+  LOW: "bg-primary-container/25 text-on-primary-container",
+  MEDIUM: "bg-tertiary-container/25 text-tertiary",
+  HIGH: "bg-error text-on-error",
 };
 
 export default async function DigitalTwinPage({
@@ -62,8 +63,8 @@ export default async function DigitalTwinPage({
                 </p>
                 {s.recommendations.length > 0 && (
                   <ul className="mt-1 list-inside list-disc text-label-md text-on-surface-variant">
-                    {s.recommendations.map((rec, i) => (
-                      <li key={i}>{rec}</li>
+                    {s.recommendations.map((rec) => (
+                      <li key={rec.id}>{rec.message}</li>
                     ))}
                   </ul>
                 )}
@@ -86,8 +87,8 @@ export default async function DigitalTwinPage({
       <GlassCard>
         <h2 className="text-body-lg font-medium text-on-surface">Recomendaciones activas</h2>
         <ul className="mt-3 flex flex-col gap-2">
-          {recommendations.data
-            .filter((r) => r.status === "ACTIVE")
+          {recommendations.items
+            .filter((r) => r.status === "PENDING")
             .map((rec) => (
               <li
                 key={rec.id}
@@ -102,7 +103,7 @@ export default async function DigitalTwinPage({
                 <DismissRecommendationButton id={rec.id} />
               </li>
             ))}
-          {recommendations.data.filter((r) => r.status === "ACTIVE").length === 0 && (
+          {recommendations.items.filter((r) => r.status === "PENDING").length === 0 && (
             <li className="text-body-md text-on-surface-variant">Sin recomendaciones activas.</li>
           )}
         </ul>

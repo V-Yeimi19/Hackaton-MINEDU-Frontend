@@ -26,7 +26,7 @@ export function Topbar({ user }: { user: SessionUser }) {
   return (
     <header className="glass-ink sticky top-0 z-40 flex items-center justify-between rounded-none px-6 py-4 sm:px-10">
       <div>
-        <p className="text-body-md font-medium">{user.fullName}</p>
+        <p className="text-body-md font-medium">{user.fullName ?? user.email}</p>
         <p className="text-label-md text-inverse-on-surface/70">{ROLE_LABEL[user.role]}</p>
       </div>
       <div className="flex items-center gap-2">

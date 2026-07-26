@@ -31,9 +31,9 @@ export default async function FamiliarStudentsPage() {
               <GlassCard className="h-full transition-opacity hover:opacity-90">
                 <h2 className="text-body-lg font-medium text-on-surface">{student.fullName}</h2>
                 <p className="mt-1 text-body-md text-on-surface-variant">
-                  {student.enrollments.length > 0
-                    ? `${student.enrollments.length} aula(s) matriculada(s)`
-                    : "Sin aula matriculada"}
+                  {student.supportNeeds.length > 0
+                    ? `${student.supportNeeds.length} necesidad(es) de apoyo registrada(s)`
+                    : "Ver detalles"}
                 </p>
               </GlassCard>
             </Link>

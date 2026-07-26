@@ -2,10 +2,16 @@ export const TOKEN_COOKIE = "ad_token";
 export const USER_COOKIE = "ad_user";
 export const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 días
 
+/**
+ * Auth.buildAuthResponse() (backend) devuelve solo { id, email, role } — Auth
+ * no guarda el perfil completo del usuario (fullName vive en Users, no hay
+ * un endpoint "GET /users/me" por authUserId para completarlo aquí sin
+ * agregar una ruta nueva al backend). fullName queda opcional a propósito.
+ */
 export type SessionUser = {
   id: string;
   email: string;
-  fullName: string;
+  fullName?: string;
   role: "ADMIN" | "DIRECTIVO" | "DOCENTE" | "FAMILIAR";
 };
 

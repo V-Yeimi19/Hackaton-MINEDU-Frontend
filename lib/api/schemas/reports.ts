@@ -1,18 +1,25 @@
 import { z } from "zod";
 
-export const reportTypeSchema = z.enum(["INSTITUTIONAL", "CLASSROOM", "STUDENT"]);
-export type ReportType = z.infer<typeof reportTypeSchema>;
-
+/**
+ * Modelo `InstitutionReport` real (reports_db) — no tiene `title`/`type`/`csvFileId`;
+ * solo se persisten reportes institucionales (los de aula/estudiante son PDF
+ * on-demand sin guardar registro, ver ReportService.generateClassroomReport/
+ * generateStudentReport en el backend).
+ */
 export const reportSchema = z.object({
   id: z.string(),
-  title: z.string(),
-  type: reportTypeSchema,
-  gradeLevel: z.string().optional(),
-  csvFileId: z.string().optional(),
-  pdfFileId: z.string().optional(),
-  generatedBy: z.string(),
+  gradeLevel: z.string().nullish(),
+  courseId: z.string().nullish(),
   periodStart: z.string(),
   periodEnd: z.string(),
+  classroomCount: z.number(),
+  studentCount: z.number(),
+  avgAttendanceRate: z.number(),
+  avgGrade: z.number(),
+  riskCounts: z.record(z.string(), z.number()),
+  fileId: z.string().nullish(),
+  pdfFileId: z.string().nullish(),
+  generatedBy: z.string(),
   createdAt: z.string(),
 });
 export type Report = z.infer<typeof reportSchema>;
@@ -42,9 +49,14 @@ export const generateStudentReportDtoSchema = z.object({
 });
 export type GenerateStudentReportDto = z.infer<typeof generateStudentReportDtoSchema>;
 
+/**
+ * ReportService.generateReport devuelve { report, classroomSummaries, pdfBuffer }
+ * (no { report, csvFileId, pdfFileId } — esos ids están en report.fileId/pdfFileId).
+ * pdfBuffer no se declara aquí (es un Buffer, no tiene sentido consumirlo desde
+ * el JSON de /generate; usar /generate/pdf con raw:true para el binario).
+ */
 export const generateReportResponseSchema = z.object({
   report: reportSchema,
-  csvFileId: z.string(),
-  pdfFileId: z.string(),
+  classroomSummaries: z.array(z.unknown()),
 });
 export type GenerateReportResponse = z.infer<typeof generateReportResponseSchema>;

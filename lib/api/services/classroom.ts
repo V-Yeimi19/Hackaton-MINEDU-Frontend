@@ -1,11 +1,13 @@
 import { apiFetch } from "../http";
 import { deletedResponseSchema } from "../schemas/common";
 import {
+  acceptTeacherInvitationResponseSchema,
   attendanceSchema,
   classroomDetailSchema,
   classroomSchema,
   competencySchema,
   courseSchema,
+  enrollmentSchema,
   enrollmentWithStudentSchema,
   gradeSchema,
   institutionDetailSchema,
@@ -276,24 +278,43 @@ export const students = {
 // ---------- Invitations ----------
 
 export const invitations = {
-  create: (dto: CreateInvitationDto, token: string) =>
-    apiFetch(`${BASE}/invitations`, {
+  /**
+   * No existe POST /invitations en el backend — hay dos rutas separadas
+   * (`invitations/teacher`, `invitations/family`) sin campo `type` en el
+   * body (la ruta ya lo determina). Esta función traduce el DTO combinado
+   * de la UI a la llamada real, según `dto.type`.
+   */
+  create: (dto: CreateInvitationDto, token: string) => {
+    if (dto.type === "TEACHER_TO_INSTITUTION") {
+      if (!dto.institutionId) throw new Error("institutionId es requerido para invitar a un docente");
+      return apiFetch(`${BASE}/invitations/teacher`, {
+        method: "POST",
+        body: { email: dto.email, institutionId: dto.institutionId },
+        token,
+        schema: invitationSchema,
+      });
+    }
+    if (!dto.classroomId) throw new Error("classroomId es requerido para invitar a una familia");
+    return apiFetch(`${BASE}/invitations/family`, {
       method: "POST",
-      body: dto,
+      body: { email: dto.email, classroomId: dto.classroomId },
       token,
       schema: invitationSchema,
-    }),
+    });
+  },
   acceptTeacher: (dto: AcceptTeacherInvitationDto, token: string) =>
     apiFetch(`${BASE}/invitations/accept/teacher`, {
       method: "POST",
       body: dto,
       token,
+      schema: acceptTeacherInvitationResponseSchema,
     }),
   acceptFamily: (dto: AcceptFamilyInvitationDto, token: string) =>
     apiFetch(`${BASE}/invitations/accept/family`, {
       method: "POST",
       body: dto,
       token,
+      schema: enrollmentSchema,
     }),
   /** Público — no requiere JWT. Muestra el detalle antes de aceptar. */
   byToken: (token: string) =>

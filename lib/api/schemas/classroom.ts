@@ -42,8 +42,8 @@ export type CreateInstitutionDto = z.infer<typeof createInstitutionDtoSchema>;
 export const institutionSchema = z.object({
   id: z.string(),
   name: z.string(),
-  code: z.string().optional(),
-  address: z.string().optional(),
+  code: z.string().nullish(),
+  address: z.string().nullish(),
   directorId: z.string(),
   createdAt: z.string(),
 });
@@ -95,16 +95,19 @@ export const classroomSchema = z.object({
   id: z.string(),
   name: z.string(),
   gradeLevel: z.string(),
-  institutionId: z.string().optional(),
+  institutionId: z.string().nullish(),
   teacherId: z.string(),
   createdAt: z.string(),
 });
 export type Classroom = z.infer<typeof classroomSchema>;
 
-/** GET /classrooms/:id devuelve el aula con sus cursos y matrículas */
+/**
+ * GET /classrooms/:id — ClassroomService.findOne solo hace
+ * `include: { courses: true }` (sin enrollments); GET /classrooms/:id/enrollments
+ * es un endpoint aparte para eso.
+ */
 export const classroomDetailSchema = classroomSchema.extend({
   courses: z.array(courseSchema),
-  enrollments: z.array(enrollmentSchema),
 });
 export type ClassroomDetail = z.infer<typeof classroomDetailSchema>;
 
@@ -113,7 +116,7 @@ export const enrollmentWithStudentSchema = enrollmentSchema.extend({
   student: z.object({
     id: z.string(),
     fullName: z.string(),
-    birthDate: z.string().optional(),
+    birthDate: z.string().nullish(),
   }),
 });
 export type EnrollmentWithStudent = z.infer<typeof enrollmentWithStudentSchema>;
@@ -228,7 +231,7 @@ export const studentSupportNeedSchema = z.object({
   studentId: z.string(),
   type: supportNeedTypeSchema,
   level: supportLevelSchema,
-  description: z.string().optional(),
+  description: z.string().nullish(),
   registeredBy: z.string(),
   createdAt: z.string(),
 });
@@ -257,19 +260,29 @@ export const updateStudentDtoSchema = z.object({
 });
 export type UpdateStudentDto = z.infer<typeof updateStudentDtoSchema>;
 
+/**
+ * StudentService (create/findOne/findAllByFamiliar/update) solo hace
+ * `include: { supportNeeds: true }` — nunca incluye `enrollments`.
+ */
 export const studentSchema = z.object({
   id: z.string(),
   fullName: z.string(),
-  birthDate: z.string().optional(),
+  birthDate: z.string().nullish(),
   familiarId: z.string(),
   supportNeeds: z.array(studentSupportNeedSchema),
-  enrollments: z.array(enrollmentSchema),
   createdAt: z.string(),
 });
 export type Student = z.infer<typeof studentSchema>;
 
 // ---------- Invitations ----------
 
+/**
+ * No existe un POST /invitations genérico en el backend — hay dos rutas
+ * separadas (`POST invitations/teacher`, `POST invitations/family`), sin
+ * campo `type` en ninguno de los dos DTOs (el tipo lo determina la ruta).
+ * Este schema combinado es solo para la UI; el servicio (`services/classroom.ts`)
+ * lo traduce a la ruta correcta antes de enviarlo.
+ */
 export const createInvitationDtoSchema = z.object({
   email: z.string().email(),
   type: invitationTypeSchema,
@@ -284,13 +297,20 @@ export const invitationSchema = z.object({
   type: invitationTypeSchema,
   status: invitationStatusSchema,
   email: z.string(),
-  institutionId: z.string().optional(),
-  classroomId: z.string().optional(),
+  institutionId: z.string().nullish(),
+  classroomId: z.string().nullish(),
   createdBy: z.string(),
-  expiresAt: z.string().optional(),
+  usedBy: z.string().nullish(),
+  usedAt: z.string().nullish(),
+  expiresAt: z.string().nullish(),
   createdAt: z.string(),
 });
 export type Invitation = z.infer<typeof invitationSchema>;
+
+export const acceptTeacherInvitationResponseSchema = z.object({ message: z.string() });
+export type AcceptTeacherInvitationResponse = z.infer<
+  typeof acceptTeacherInvitationResponseSchema
+>;
 
 export const acceptTeacherInvitationDtoSchema = z.object({ token: z.string() });
 export type AcceptTeacherInvitationDto = z.infer<typeof acceptTeacherInvitationDtoSchema>;
@@ -305,7 +325,7 @@ export const institutionTeacherSchema = z.object({
   id: z.string(),
   institutionId: z.string(),
   teacherId: z.string(),
-  createdAt: z.string(),
+  joinedAt: z.string(),
 });
 export type InstitutionTeacher = z.infer<typeof institutionTeacherSchema>;
 

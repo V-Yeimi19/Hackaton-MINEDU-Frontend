@@ -70,8 +70,15 @@ export async function apiFetch<T>(
   }
 
   if (raw) return res as unknown as T;
-  if (res.status === 204) return undefined as T;
 
-  const data = await res.json();
+  // Ningún controlador del backend fija @HttpCode(204) ni devuelve un body
+  // para los endpoints DELETE (ni para otros que retornan Promise<void>) —
+  // responden 200 con el body vacío. Parsear con res.json() directamente
+  // revienta con "Unexpected end of JSON input" en ese caso, así que se lee
+  // como texto primero y solo se parsea si hay contenido real.
+  const text = await res.text();
+  if (!text) return undefined as T;
+
+  const data = JSON.parse(text);
   return schema ? schema.parse(data) : (data as T);
 }
