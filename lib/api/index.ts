@@ -11,3 +11,4 @@ export * as analyticsApi from "./services/analytics";
 export * as reportsApi from "./services/reports";
 export * as aiApi from "./services/ai";
 export * as accessibilityApi from "./services/accessibility";
+export * as dashboardApi from "./services/dashboard";

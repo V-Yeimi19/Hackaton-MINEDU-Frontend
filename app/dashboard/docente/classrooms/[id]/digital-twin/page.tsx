@@ -87,8 +87,8 @@ export default async function DigitalTwinPage({
       <GlassCard>
         <h2 className="text-body-lg font-medium text-on-surface">Recomendaciones activas</h2>
         <ul className="mt-3 flex flex-col gap-2">
-          {recommendations.data
-            .filter((r) => r.status === "ACTIVE")
+          {recommendations.items
+            .filter((r) => r.status !== "DISMISSED")
             .map((rec) => (
               <li
                 key={rec.id}
@@ -103,7 +103,7 @@ export default async function DigitalTwinPage({
                 <DismissRecommendationButton id={rec.id} />
               </li>
             ))}
-          {recommendations.data.filter((r) => r.status === "ACTIVE").length === 0 && (
+          {recommendations.items.filter((r) => r.status !== "DISMISSED").length === 0 && (
             <li className="text-body-md text-on-surface-variant">Sin recomendaciones activas.</li>
           )}
         </ul>

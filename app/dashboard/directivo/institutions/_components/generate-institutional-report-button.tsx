@@ -13,7 +13,7 @@ export function GenerateInstitutionalReportButton() {
   const [periodEnd, setPeriodEnd] = useState(today);
   const [gradeLevel, setGradeLevel] = useState("");
   const [error, setError] = useState<string>();
-  const [success, setSuccess] = useState<{ csvFileId: string; pdfFileId: string }>();
+  const [success, setSuccess] = useState<{ reportId: string }>();
   const [submitting, setSubmitting] = useState(false);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
 
@@ -34,7 +34,7 @@ export function GenerateInstitutionalReportButton() {
     setSubmitting(true);
     try {
       const res = await reportsApi.generateInstitutionalReport(buildDto(), token);
-      setSuccess({ csvFileId: res.csvFileId, pdfFileId: res.pdfFileId });
+      setSuccess({ reportId: res.report.id });
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo generar el reporte");
     } finally {
@@ -110,10 +110,10 @@ export function GenerateInstitutionalReportButton() {
       </div>
 
       {success && (
-        <p className="text-body-md text-success">
+        <p className="text-body-md text-primary">
           Reporte generado.{" "}
           <a
-            href={`/api/reports/${success.csvFileId}/download`}
+            href={`/api/reports/${success.reportId}/download`}
             className="underline text-primary"
           >
             Descargar CSV

@@ -28,7 +28,7 @@ export default async function FamiliarStudentsPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {children.map((student) => (
             <Link key={student.id} href={`/dashboard/familiar/students/${student.id}`}>
-              <GlassCard className="h-full transition-opacity hover:opacity-90">
+              <GlassCard className="h-full transition-transform hover:-translate-y-1">
                 <h2 className="text-body-lg font-medium text-on-surface">{student.fullName}</h2>
                 <p className="mt-1 text-body-md text-on-surface-variant">
                   {student.supportNeeds.length > 0

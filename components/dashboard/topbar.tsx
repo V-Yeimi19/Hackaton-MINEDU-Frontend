@@ -4,14 +4,8 @@ import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { NotificationsBell } from "./notifications-bell";
 import { useAuth } from "@/lib/auth/auth-context";
+import { ROLE_LABEL } from "@/lib/auth/nav-config";
 import type { SessionUser } from "@/lib/api/token";
-
-const ROLE_LABEL: Record<SessionUser["role"], string> = {
-  ADMIN: "Administrador",
-  DIRECTIVO: "Directivo",
-  DOCENTE: "Docente",
-  FAMILIAR: "Familiar",
-};
 
 export function Topbar({ user }: { user: SessionUser }) {
   const router = useRouter();

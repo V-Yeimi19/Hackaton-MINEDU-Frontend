@@ -1,14 +1,24 @@
 import { getServerToken } from "@/lib/api/token.server";
 import { classroomApi } from "@/lib/api";
 import { GlassCard } from "@/components/ui/glass-card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableHeaderRow,
+  TableRow,
+} from "@/components/ui/table";
 import { RevokeInvitationButton } from "./_components/revoke-invitation-button";
 import type { InvitationStatus } from "@/lib/api/schemas/classroom";
 
-const STATUS_STYLES: Record<InvitationStatus, string> = {
-  PENDING: "bg-secondary-container/30 text-secondary",
-  ACCEPTED: "bg-primary-container/30 text-primary",
-  REVOKED: "bg-error-container/30 text-error",
-  EXPIRED: "bg-surface-container-high text-on-surface-variant",
+const STATUS_TONE: Record<InvitationStatus, "primary" | "error" | "tertiary" | "neutral"> = {
+  PENDING: "neutral",
+  ACCEPTED: "primary",
+  REVOKED: "error",
+  EXPIRED: "neutral",
 };
 
 const TYPE_LABELS: Record<string, string> = {
@@ -32,47 +42,38 @@ export default async function InvitationsPage() {
         </GlassCard>
       ) : (
         <GlassCard>
-          <div className="overflow-x-auto">
-            <table className="w-full text-body-md">
-              <thead>
-                <tr className="border-b border-outline-variant text-left text-label-md uppercase tracking-wide text-on-surface-variant">
-                  <th className="pb-2 pr-4">Correo</th>
-                  <th className="pb-2 pr-4">Tipo</th>
-                  <th className="pb-2 pr-4">Estado</th>
-                  <th className="pb-2 pr-4">Fecha</th>
-                  <th className="pb-2">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {invitations.map((inv) => (
-                  <tr
-                    key={inv.id}
-                    className="border-b border-outline-variant/50 last:border-0"
-                  >
-                    <td className="py-3 pr-4 text-on-surface">{inv.email}</td>
-                    <td className="py-3 pr-4 text-on-surface-variant">
-                      {TYPE_LABELS[inv.type] ?? inv.type}
-                    </td>
-                    <td className="py-3 pr-4">
-                      <span
-                        className={`rounded-full px-2.5 py-0.5 text-label-sm ${STATUS_STYLES[inv.status]}`}
-                      >
-                        {inv.status}
-                      </span>
-                    </td>
-                    <td className="py-3 pr-4 text-on-surface-variant">
-                      {new Date(inv.createdAt).toLocaleDateString("es-PE")}
-                    </td>
-                    <td className="py-3">
-                      {inv.status === "PENDING" && (
-                        <RevokeInvitationButton invitationId={inv.id} />
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Table>
+            <TableHeader>
+              <TableHeaderRow>
+                <TableHead>Correo</TableHead>
+                <TableHead>Tipo</TableHead>
+                <TableHead>Estado</TableHead>
+                <TableHead>Fecha</TableHead>
+                <TableHead>Acciones</TableHead>
+              </TableHeaderRow>
+            </TableHeader>
+            <TableBody>
+              {invitations.map((inv) => (
+                <TableRow key={inv.id}>
+                  <TableCell>{inv.email}</TableCell>
+                  <TableCell className="text-on-surface-variant">
+                    {TYPE_LABELS[inv.type] ?? inv.type}
+                  </TableCell>
+                  <TableCell>
+                    <Badge tone={STATUS_TONE[inv.status]}>{inv.status}</Badge>
+                  </TableCell>
+                  <TableCell className="text-on-surface-variant">
+                    {new Date(inv.createdAt).toLocaleDateString("es-PE")}
+                  </TableCell>
+                  <TableCell>
+                    {inv.status === "PENDING" && (
+                      <RevokeInvitationButton invitationId={inv.id} />
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </GlassCard>
       )}
     </div>

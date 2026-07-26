@@ -4,6 +4,15 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Button, FieldError, Select } from "@/components/ui/form";
 import { GlassCard } from "@/components/ui/glass-card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableHeaderRow,
+  TableRow,
+} from "@/components/ui/table";
 import { authApi, usersApi } from "@/lib/api";
 import { getClientToken } from "@/lib/api/token";
 import { ROLES } from "@/lib/api/schemas/common";
@@ -120,57 +129,52 @@ export default function AdminUsersPage() {
         ) : users.length === 0 ? (
           <p className="text-body-md text-on-surface-variant">No se encontraron usuarios.</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-body-md">
-              <thead>
-                <tr className="border-b border-outline-variant text-left text-label-md uppercase tracking-wide text-on-surface-variant">
-                  <th className="pb-2 pr-4">Nombre</th>
-                  <th className="pb-2 pr-4">Correo</th>
-                  <th className="pb-2 pr-4">Rol</th>
-                  <th className="pb-2 pr-4">Creado</th>
-                  <th className="pb-2">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr
-                    key={user.id}
-                    className="border-b border-outline-variant/50 last:border-0"
-                  >
-                    <td className="py-3 pr-4 text-on-surface">{user.fullName}</td>
-                    <td className="py-3 pr-4 text-on-surface-variant">{user.email}</td>
-                    <td className="py-3 pr-4">
-                      <Select
-                        value={user.role}
-                        onChange={(e) =>
-                          handleRoleChange(user.id, user.authUserId, e.target.value)
-                        }
-                        className="w-auto"
-                      >
-                        {ROLE_OPTIONS.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </Select>
-                    </td>
-                    <td className="py-3 pr-4 text-on-surface-variant">
-                      {new Date(user.createdAt).toLocaleDateString("es-PE")}
-                    </td>
-                    <td className="py-3">
-                      <Button
-                        variant="secondary"
-                        onClick={() => handleDelete(user.id)}
-                        className="text-error"
-                      >
-                        Eliminar
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Table>
+            <TableHeader>
+              <TableHeaderRow>
+                <TableHead>Nombre</TableHead>
+                <TableHead>Correo</TableHead>
+                <TableHead>Rol</TableHead>
+                <TableHead>Creado</TableHead>
+                <TableHead>Acciones</TableHead>
+              </TableHeaderRow>
+            </TableHeader>
+            <TableBody>
+              {users.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell>{user.fullName}</TableCell>
+                  <TableCell className="text-on-surface-variant">{user.email}</TableCell>
+                  <TableCell>
+                    <Select
+                      value={user.role}
+                      onChange={(e) =>
+                        handleRoleChange(user.id, user.authUserId, e.target.value)
+                      }
+                      className="w-auto"
+                    >
+                      {ROLE_OPTIONS.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </Select>
+                  </TableCell>
+                  <TableCell className="text-on-surface-variant">
+                    {new Date(user.createdAt).toLocaleDateString("es-PE")}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="secondary"
+                      onClick={() => handleDelete(user.id)}
+                      className="text-error"
+                    >
+                      Eliminar
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         )}
 
         {totalPages > 1 && (

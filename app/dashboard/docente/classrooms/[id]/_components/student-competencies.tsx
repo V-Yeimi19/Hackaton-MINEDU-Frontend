@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import { classroomApi } from "@/lib/api";
 import { getClientToken } from "@/lib/api/token";
+import { Badge } from "@/components/ui/badge";
 import type { StudentCompetency } from "@/lib/api/schemas/classroom";
 
-const LEVEL_STYLES: Record<string, string> = {
-  BASICO: "bg-error-container/30 text-error",
-  INTERMEDIO: "bg-secondary-container/30 text-secondary",
-  AVANZADO: "bg-primary-container/30 text-primary",
-  LOGRADO: "bg-tertiary-container/30 text-tertiary",
+const LEVEL_TONE: Record<string, "primary" | "error" | "tertiary" | "neutral"> = {
+  BASICO: "error",
+  INTERMEDIO: "neutral",
+  AVANZADO: "primary",
+  LOGRADO: "tertiary",
 };
 
 export function StudentCompetencies({
@@ -61,11 +62,7 @@ export function StudentCompetencies({
               <span className="text-on-surface-variant">
                 {sc.competency.name} ({sc.competency.area})
               </span>
-              <span
-                className={`rounded-full px-2.5 py-0.5 text-label-sm ${LEVEL_STYLES[sc.level] ?? "bg-surface-container-high text-on-surface-variant"}`}
-              >
-                {sc.level}
-              </span>
+              <Badge tone={LEVEL_TONE[sc.level] ?? "neutral"}>{sc.level}</Badge>
             </div>
           ))}
         </div>

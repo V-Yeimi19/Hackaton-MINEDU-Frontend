@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduVision 2026 | Director Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-panel {
+            backdrop-filter: blur(40px);
+            background-color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass-panel {
+            background-color: rgba(21, 29, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4fafc;
+        }
+    </style>
+<!-- Shared Components Styles & Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface-variant": "#3c494c",
+                    "surface-dim": "#d5dbdd",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#004e59",
+                    "on-tertiary-container": "#85000d",
+                    "primary-fixed-dim": "#44d8f1",
+                    "secondary-fixed": "#e5e2e1",
+                    "primary": "#006876",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#ba1a20",
+                    "surface-container-highest": "#dde3e5",
+                    "tertiary-fixed": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed": "#410003",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#2b3133",
+                    "outline": "#6c797c",
+                    "tertiary-fixed-dim": "#ffb3ac",
+                    "on-secondary": "#ffffff",
+                    "surface-bright": "#f4fafc",
+                    "primary-fixed": "#a1efff",
+                    "outline-variant": "#bbc9cc",
+                    "on-secondary-fixed-variant": "#474746",
+                    "background": "#f4fafc",
+                    "inverse-primary": "#44d8f1",
+                    "on-secondary-container": "#636262",
+                    "on-surface": "#161d1e",
+                    "on-primary": "#ffffff",
+                    "inverse-on-surface": "#ecf2f3",
+                    "secondary-container": "#e2dfde",
+                    "surface": "#f4fafc",
+                    "on-primary-container": "#004650",
+                    "tertiary-container": "#ff8980",
+                    "on-primary-fixed": "#001f25",
+                    "on-background": "#161d1e",
+                    "surface-container": "#e9eff0",
+                    "surface-variant": "#dde3e5",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "surface-tint": "#006876",
+                    "error": "#ba1a1a",
+                    "secondary": "#5f5e5e",
+                    "primary-container": "#00bcd4",
+                    "surface-container-high": "#e3e9eb",
+                    "surface-container-low": "#eff5f6",
+                    "on-tertiary-fixed-variant": "#930010"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "margin-desktop": "40px",
+                    "gutter": "16px",
+                    "unit": "8px",
+                    "container-padding": "24px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/60 backdrop-blur-[40px] border-b border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.08)] flex justify-between items-center px-margin-desktop h-16 w-full">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">EduVision 2026</span>
+<div class="hidden md:flex items-center ml-8 gap-6 h-full">
+<a class="font-body-md text-body-md text-primary border-b-2 border-primary py-4" href="#">Dashboard</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:bg-white/10 transition-colors py-4" href="#">Institutions</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:bg-white/10 transition-colors py-4" href="#">Analytics</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary-container text-label-md w-64" placeholder="Search resources..." type="text"/>
+</div>
+<button class="material-symbols-outlined p-2 text-on-surface-variant cursor-pointer active:scale-95 transition-transform">notifications</button>
+<button class="material-symbols-outlined p-2 text-on-surface-variant cursor-pointer active:scale-95 transition-transform">settings</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/20">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a school administrator in a bright, modern office setting. The individual is wearing a charcoal suit, exuding authority and calmness. Soft natural lighting from large windows fills the space, aligning with a high-end corporate educational aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuATGqG2nTMwj-I62nIVR6ceEmVbPRCXE0H7o_DJlpalkP_5ZeBiGiug_Gnv_XUg7eDEKHUw0_OCTfm33HKSN3Qaeybk-KWm4ZipYB1xflZqY7fv-3hUHbV-cpis5bJzEJeF-f76nta8n1vT3n-gYIIScEVjo9vM4L7kD99b0FFjJXp16jiCEnX2XfHxPrQXopo5CpAEBe7tWGyv6iFHE0ZW0Fl_qbZsk8tjC6wLzO9TAYPRaczwyCbAFqmcxR382OGSwBBHb62Oea0"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 h-full w-64 z-40 bg-on-secondary-fixed dark:bg-black/90 backdrop-blur-[40px] border-r border-white/10 shadow-xl hidden lg:flex flex-col h-full py-unit gap-2 pt-20">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white">school</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-white text-[16px] leading-tight">EduVision</div>
+<div class="text-[12px] text-secondary-fixed-dim uppercase tracking-widest">National Portal</div>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1 px-3">
+<a class="flex items-center gap-3 px-4 py-3 text-primary-container font-bold border-l-4 border-primary-container bg-white/5 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-secondary-fixed-variant hover:text-primary-container hover:bg-white/10 transition-all font-label-md text-label-md group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">school</span> Institutions
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-secondary-fixed-variant hover:text-primary-container hover:bg-white/10 transition-all font-label-md text-label-md group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">insights</span> Analytics
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-secondary-fixed-variant hover:text-primary-container hover:bg-white/10 transition-all font-label-md text-label-md group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">menu_book</span> Curriculum
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-secondary-fixed-variant hover:text-primary-container hover:bg-white/10 transition-all font-label-md text-label-md group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">group</span> Faculty
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-secondary-fixed-variant hover:text-primary-container hover:bg-white/10 transition-all font-label-md text-label-md group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">description</span> Reports
+            </a>
+</nav>
+<div class="px-6 py-4">
+<button class="w-full py-2 bg-tertiary text-white rounded-lg font-label-md text-label-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">warning</span> System Alert
+            </button>
+</div>
+<div class="mt-auto border-t border-white/10 p-3 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-secondary-fixed-variant hover:text-primary-container font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">help</span> Help Center
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-secondary-fixed-variant hover:text-error font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">logout</span> Sign Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-64 pt-24 px-margin-mobile md:px-margin-desktop pb-12 transition-all">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Director Dashboard</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Welcome back, Administrator. Here is your institutional overview for today.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-2 bg-primary-container text-on-primary-container rounded-full font-label-md text-label-md flex items-center gap-2 shadow-lg active:scale-95 transition-all">
+<span class="material-symbols-outlined">add</span> New Institution
+                </button>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- My Institutions Section -->
+<section class="md:col-span-8 flex flex-col gap-gutter">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-on-surface">My Institutions</h2>
+<button class="text-primary font-label-md text-label-md hover:underline">View All</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
+<!-- Institution Card 1 -->
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col group transition-all hover:shadow-2xl">
+<div class="h-40 relative">
+<img class="w-full h-full object-cover" data-alt="A grand colonial-style school building with large brick arches and well-manicured green lawns. The scene is bathed in warm afternoon sunlight, creating a prestigious and welcoming atmosphere. The high-contrast architectural details suggest a legacy of academic excellence and institutional stability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-jI7BGQV51L2XX-JXFzgnxa-_mwTlZggLqQqT4BTWDeCiTDxs5mqds6KQdSrjmyDSKWa4ba-sX0-GKOnMlDWi7BsfXyrJncQabJJskQx-kfxRtlCbnfYIZm5-1rCcBA70y8sq1VWYsuqnVNO4-5tMED4KjwWuQBe5wC38ADk023zycvt8o80nLtvEi1vb9NI0LN6WPpFogdp4Zu4f410y053c8ul7QHFay0dS7Wp5OukvPLlnfagzfM3IZTg2p-z4F0zij_rcxm0"/>
+<div class="absolute top-4 right-4 bg-primary-container text-white px-3 py-1 rounded-full text-label-md">Top Rated</div>
+</div>
+<div class="p-container-padding space-y-4">
+<div>
+<h3 class="font-headline-md text-[20px] text-on-surface">St. Andrew's Academy</h3>
+<p class="text-on-surface-variant text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Metropolitan District
+                                </p>
+</div>
+<div class="flex justify-between items-center bg-surface-container-low p-3 rounded-lg">
+<div class="text-center">
+<span class="block font-bold text-primary">1,240</span>
+<span class="text-[10px] uppercase text-on-surface-variant">Students</span>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant"></div>
+<div class="text-center">
+<span class="block font-bold text-primary">8.4</span>
+<span class="text-[10px] uppercase text-on-surface-variant">Avg Grade</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Institution Card 2 -->
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col group transition-all hover:shadow-2xl">
+<div class="h-40 relative">
+<img class="w-full h-full object-cover" data-alt="A modern, glass-fronted university campus library under a clear blue sky. Reflective surfaces and sharp geometric lines define the contemporary architecture. The image conveys a sense of forward-thinking education, technological integration, and a bright, aspirational learning environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZBomAAgu5OClqeTrQ2uCPBrUJHao3Of_AvrYKnlrSsPtmerVp7e_18lMeQIHU3cVv6ysnk__r7Q2zPmsdsCzjL4TaranE0ErZtL091zUu_omE_1iOjpnYqa--bw6NntDAt6QbHVxrwgzsEPR2GyqPYKxmCs_UMl5nX9MSL0ZCkkccxMUwjt57rGZROvnpi6DmOO55x4O1LZVYtuLTou7PBPLtFsl1OufNlbyGf6xLL29r40iKo5reIoQJrUZw3dMpS_phd0VnBeE"/>
+<div class="absolute top-4 right-4 bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-label-md">Alert: Low Grades</div>
+</div>
+<div class="p-container-padding space-y-4">
+<div>
+<h3 class="font-headline-md text-[20px] text-on-surface">Innovation High School</h3>
+<p class="text-on-surface-variant text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Tech Corridor
+                                </p>
+</div>
+<div class="flex justify-between items-center bg-surface-container-low p-3 rounded-lg">
+<div class="text-center">
+<span class="block font-bold text-primary">856</span>
+<span class="text-[10px] uppercase text-on-surface-variant">Students</span>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant"></div>
+<div class="text-center">
+<span class="block font-bold text-error">6.2</span>
+<span class="text-[10px] uppercase text-on-surface-variant">Avg Grade</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Teacher Invitation Status -->
+<div class="glass-panel rounded-xl p-container-padding mt-4">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6">Teacher Onboarding</h2>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 border border-outline-variant rounded-lg bg-surface-container-lowest">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">link</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">eduvision.org/invite/t-8821x</p>
+<p class="text-label-md text-on-surface-variant">Pending - Math Dept (3 slots)</p>
+</div>
+</div>
+<button class="px-4 py-1 border border-primary text-primary rounded-full text-label-md hover:bg-primary/5">Copy Link</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex items-center gap-3 p-3 rounded-lg bg-white/30 border border-white/20">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A friendly female teacher with a warm smile, wearing a professional teal blazer. She is standing in a brightly lit, modern classroom with a whiteboard in the background. The mood is encouraging and professional, reflecting a high-quality educational staff environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtHHXAjWbxexGzuViBTQfbv2VqNYRAhOjL0J85EICAMLkKZGFreO6Ss8U70RqQLvQW_cOhm8XK5QSJC9TaGxjjYmX7Bpt-mXIlgWG5TAkmLRpFR_ixS8d2Wa3A0hk-QZdOidPq2ZsuD2Zog-cSRN5RGxYbEWrIiP0GhDRQMJjOdCUqY34FoqVdyq8yuzsz39YftGU01AFomrljMigblfLcjPeX9128ACLflPk41b7TLrhq7Az-8AWbueL6f0FlZZxscC7xzVhUMRk"/>
+<div>
+<p class="font-bold text-on-surface text-sm">Sarah Jenkins</p>
+<p class="text-[11px] text-primary flex items-center gap-1">Joined 2h ago <span class="w-1 h-1 bg-primary rounded-full"></span> Science</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg bg-white/30 border border-white/20">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A focused male teacher in his late 30s, wearing glasses and a casual grey sweater. He is looking at a tablet in a modern library setting. The lighting is soft and intellectual, emphasizing a dedicated and technology-fluent educator profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYXRvXiWVVb123YO1U9zumJyJl9m0KEjuN6U9JF3CY8tu8cZXiDMiFR-dw9NQp5h0SkmYjZca9ybYbGvBKuh8XXJ_iuALK8o5bGh2VUhy633fkLDpcJF125fLHD5gG9XWogFJQcRn8K6hNTVlLs2iaGa0UbeoP6-M6ZV7xlJAZ_tw36Kcg7vSqUsPJUYc-kxeFCQVIgYP6JjKZiCQ1_fnuw4xwcuSlQqE_cu4NGzLeVEd0H_R7qMwSGJaLJq-OAAYTx8D4TkOa5XU"/>
+<div>
+<p class="font-bold text-on-surface text-sm">Marcus Vane</p>
+<p class="text-[11px] text-primary flex items-center gap-1">Joined 5h ago <span class="w-1 h-1 bg-primary rounded-full"></span> History</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sidebar Content: Critical Alerts & Reports -->
+<aside class="md:col-span-4 flex flex-col gap-gutter">
+<!-- Critical Alerts -->
+<div class="glass-panel rounded-xl p-container-padding border-tertiary/20">
+<div class="flex items-center gap-2 text-error mb-4">
+<span class="material-symbols-outlined">report_problem</span>
+<h2 class="font-headline-md text-[18px] font-bold">Critical Alerts</h2>
+</div>
+<div class="space-y-3">
+<div class="p-3 bg-error-container/40 rounded-lg border border-error/10">
+<div class="flex justify-between items-start mb-1">
+<span class="font-bold text-on-error-container text-sm">High Absenteeism</span>
+<span class="bg-error text-white text-[10px] px-2 py-0.5 rounded-full uppercase font-bold">Priority</span>
+</div>
+<p class="text-xs text-on-surface-variant">Classroom 12-B at Innovation High reached 24% absenteeism this week.</p>
+</div>
+<div class="p-3 bg-error-container/40 rounded-lg border border-error/10">
+<div class="flex justify-between items-start mb-1">
+<span class="font-bold text-on-error-container text-sm">Failing Grades</span>
+<span class="bg-error text-white text-[10px] px-2 py-0.5 rounded-full uppercase font-bold">Urgent</span>
+</div>
+<p class="text-xs text-on-surface-variant">Calculus III: 45% of students are currently below the passing threshold.</p>
+</div>
+</div>
+<button class="w-full mt-4 py-2 border-2 border-error text-error rounded-lg font-label-md text-label-md hover:bg-error/5 transition-all">Resolve Alerts</button>
+</div>
+<!-- Institutional Reports -->
+<div class="glass-panel rounded-xl p-container-padding">
+<h2 class="font-headline-md text-[18px] text-on-surface mb-6">Institutional Reports</h2>
+<div class="space-y-4">
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-surface-container rounded-lg group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-primary">analytics</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Annual Performance</p>
+<p class="text-[10px] text-on-surface-variant">PDF • 12.4 MB</p>
+</div>
+</div>
+<button class="material-symbols-outlined text-primary-container hover:scale-110 transition-transform">download</button>
+</div>
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-surface-container rounded-lg group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-primary">diversity_3</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Faculty Assessment</p>
+<p class="text-[10px] text-on-surface-variant">CSV • 2.1 MB</p>
+</div>
+</div>
+<button class="material-symbols-outlined text-primary-container hover:scale-110 transition-transform">download</button>
+</div>
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-surface-container rounded-lg group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-primary">account_balance</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Financial Audit Q3</p>
+<p class="text-[10px] text-on-surface-variant">XLSX • 5.8 MB</p>
+</div>
+</div>
+<button class="material-symbols-outlined text-primary-container hover:scale-110 transition-transform">download</button>
+</div>
+</div>
+<button class="w-full mt-6 py-3 bg-primary-container text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:brightness-110 transition-all shadow-md">
+                        Generate Custom Report
+                    </button>
+</div>
+<!-- Quick Stats Sidebar Item -->
+<div class="glass-panel rounded-xl p-container-padding bg-primary/5">
+<h2 class="text-on-surface text-label-md uppercase tracking-wider mb-4 opacity-70">Total Overview</h2>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-on-surface-variant">Budget Utilization</span>
+<span class="font-bold text-primary">78%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 78%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-on-surface-variant">Curriculum Completion</span>
+<span class="font-bold text-primary">92%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary-container" style="width: 92%"></div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Floating Action Button - Only on appropriate screens -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-[28px]">add_comment</span>
+</button>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Simple theme toggle logic (simulated)
+        let isDark = false;
+        function toggleTheme() {
+            isDark = !isDark;
+            document.documentElement.classList.toggle('dark', isDark);
+        }
+    </script>
+</body></html>

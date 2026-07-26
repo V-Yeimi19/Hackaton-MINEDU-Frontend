@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FieldError, Select } from "@/components/ui/form";
+import { Badge } from "@/components/ui/badge";
 import { classroomApi } from "@/lib/api";
 import { getClientToken } from "@/lib/api/token";
 import type { Attendance, AttendanceStatus, EnrollmentWithStudent } from "@/lib/api/schemas/classroom";
@@ -16,11 +17,11 @@ const STATUS_LABEL: Record<AttendanceStatus, string> = {
   EXCUSED: "Justificado",
 };
 
-const STATUS_COLOR: Record<AttendanceStatus, string> = {
-  PRESENT: "bg-primary/20 text-primary",
-  ABSENT: "bg-error/20 text-error",
-  LATE: "bg-tertiary/20 text-tertiary",
-  EXCUSED: "bg-surface-container-high text-on-surface-variant",
+const STATUS_TONE: Record<AttendanceStatus, "primary" | "error" | "tertiary" | "neutral"> = {
+  PRESENT: "primary",
+  ABSENT: "error",
+  LATE: "tertiary",
+  EXCUSED: "neutral",
 };
 
 export function AttendanceHistory({
@@ -100,11 +101,7 @@ export function AttendanceHistory({
                   {studentName(record.studentId)}
                 </span>
                 <div className="flex items-center gap-2">
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-label-md ${STATUS_COLOR[record.status]}`}
-                  >
-                    {STATUS_LABEL[record.status]}
-                  </span>
+                  <Badge tone={STATUS_TONE[record.status]}>{STATUS_LABEL[record.status]}</Badge>
                   <Select
                     className="w-32"
                     value={record.status}

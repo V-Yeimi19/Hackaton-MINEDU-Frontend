@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduVision 2026 - Panel del Docente</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            background-color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass-card {
+            background-color: rgba(213, 219, 221, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0, 104, 118, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface-variant": "#3c494c",
+                    "surface-dim": "#d5dbdd",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#004e59",
+                    "on-tertiary-container": "#85000d",
+                    "primary-fixed-dim": "#44d8f1",
+                    "secondary-fixed": "#e5e2e1",
+                    "primary": "#006876",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#ba1a20",
+                    "surface-container-highest": "#dde3e5",
+                    "tertiary-fixed": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed": "#410003",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#2b3133",
+                    "outline": "#6c797c",
+                    "tertiary-fixed-dim": "#ffb3ac",
+                    "on-secondary": "#ffffff",
+                    "surface-bright": "#f4fafc",
+                    "primary-fixed": "#a1efff",
+                    "outline-variant": "#bbc9cc",
+                    "on-secondary-fixed-variant": "#474746",
+                    "background": "#f4fafc",
+                    "inverse-primary": "#44d8f1",
+                    "on-secondary-container": "#636262",
+                    "on-surface": "#161d1e",
+                    "on-primary": "#ffffff",
+                    "inverse-on-surface": "#ecf2f3",
+                    "secondary-container": "#e2dfde",
+                    "surface": "#f4fafc",
+                    "on-primary-container": "#004650",
+                    "tertiary-container": "#ff8980",
+                    "on-primary-fixed": "#001f25",
+                    "on-background": "#161d1e",
+                    "surface-container": "#e9eff0",
+                    "surface-variant": "#dde3e5",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "surface-tint": "#006876",
+                    "error": "#ba1a1a",
+                    "secondary": "#5f5e5e",
+                    "primary-container": "#00bcd4",
+                    "surface-container-high": "#e3e9eb",
+                    "surface-container-low": "#eff5f6",
+                    "on-tertiary-fixed-variant": "#930010"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "margin-desktop": "40px",
+                    "gutter": "16px",
+                    "unit": "8px",
+                    "container-padding": "24px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex">
+<!-- SideNavBar Anchor -->
+<aside class="fixed left-0 h-full w-64 z-40 bg-on-secondary-fixed dark:bg-black/90 backdrop-blur-[40px] border-r border-white/10 shadow-xl flex flex-col h-full py-unit gap-2">
+<div class="px-6 py-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-white">EduVision</h1>
+<p class="font-label-md text-label-md text-secondary-fixed-dim uppercase tracking-widest">National Portal</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-primary-container font-bold border-l-4 border-primary-container bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-secondary-fixed-variant dark:text-secondary-fixed-dim hover:text-primary-container hover:bg-white/10 transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">school</span>
+<span class="font-label-md">Institutions</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-secondary-fixed-variant dark:text-secondary-fixed-dim hover:text-primary-container hover:bg-white/10 transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">insights</span>
+<span class="font-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-secondary-fixed-variant dark:text-secondary-fixed-dim hover:text-primary-container hover:bg-white/10 transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">menu_book</span>
+<span class="font-label-md">Curriculum</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-secondary-fixed-variant dark:text-secondary-fixed-dim hover:text-primary-container hover:bg-white/10 transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">group</span>
+<span class="font-label-md">Faculty</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-secondary-fixed-variant dark:text-secondary-fixed-dim hover:text-primary-container hover:bg-white/10 transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">description</span>
+<span class="font-label-md">Reports</span>
+</a>
+</nav>
+<div class="px-4 py-6 border-t border-white/10">
+<button class="w-full bg-error/20 hover:bg-error/30 text-error-container font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 mb-4">
+<span class="material-symbols-outlined">notification_important</span>
+<span>System Alert</span>
+</button>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md">Help Center</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-64 min-h-screen relative overflow-hidden bg-background">
+<!-- TopAppBar Anchor -->
+<header class="fixed top-0 right-0 left-64 z-50 h-16 bg-surface/60 backdrop-blur-[40px] border-b border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.08)] flex justify-between items-center px-margin-desktop">
+<div class="flex items-center gap-8">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">EduVision 2026</span>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-outline">search</span>
+<input class="bg-surface-container border-none rounded-full pl-10 pr-4 py-2 w-64 focus:ring-2 focus:ring-primary-container transition-all" placeholder="Search students, resources..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface hover:bg-white/10 transition-colors cursor-pointer active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface hover:bg-white/10 transition-colors cursor-pointer active:scale-95">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline/20 mx-2"></div>
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="text-right">
+<p class="font-label-md text-on-surface leading-tight">Prof. Alejandro Martí</p>
+<p class="text-[10px] text-outline uppercase tracking-wider">Docente Principal</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a male teacher in his 40s wearing a modern smart-casual blazer. The background is a blurred high-tech educational environment with soft cyan and white lighting. The image should convey authority, intelligence, and approachability in a clean corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaCBmQziVRLKPNni-Z6kQgEthkP34h3D1IRS945fF2SR10DADVPTY2SXTAOmn1PyiC-7r-6NLrrLK5mG8Jh6j8RjzROocCzds8-3d4Gs6if-bFFZEnnm6ebpKFiwJx9xI8fmrwvtJB9w4U2OP-cpLiT3sjzKsDZAaFet-mvEVOOenwzP5p99ijimm6bjZmCpJ4udc7Qbn2y38ftWNnegbB0w8k5vBN0nAmthQ6qSBc5KE5LyfQmVQ_SJC9_MukFWgFpp1gAAXGcpk"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Dashboard Content -->
+<section class="pt-24 px-margin-desktop pb-12">
+<!-- Welcome Header -->
+<div class="mb-8">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">¡Hola, Docente! 👋</h2>
+<p class="text-on-surface-variant font-body-lg">Aquí tienes el resumen de tu jornada académica para hoy.</p>
+</div>
+<!-- Dashboard Bento Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- AI Insight Card (Cyan Highlight) -->
+<div class="col-span-12 lg:col-span-8 glass-card rounded-2xl p-container-padding relative overflow-hidden shadow-sm">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/10 blur-3xl -mr-16 -mt-16 rounded-full"></div>
+<div class="flex items-start justify-between mb-6 relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 bg-primary-container/20 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary">AI Insight del Día</h3>
+<p class="text-label-md text-on-surface-variant">Análisis automatizado de rendimiento</p>
+</div>
+</div>
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-label-md font-bold">ACTUALIZADO</span>
+</div>
+<div class="bg-white/40 p-6 rounded-xl border border-primary-container/20 mb-4 relative z-10">
+<p class="text-body-lg text-on-primary-container italic font-medium leading-relaxed">
+                            "Se ha detectado una mejora del <span class="text-primary font-bold">14% en la retención conceptual</span> de la clase 10-B tras la implementación de los nuevos módulos de Pipeline de Accesibilidad. Sin embargo, 4 estudiantes muestran una tendencia a la baja en participación sincrónica."
+                        </p>
+</div>
+<div class="flex gap-4 relative z-10">
+<button class="bg-primary hover:bg-primary/90 text-on-primary px-6 py-2 rounded-xl font-bold transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+                            Aplicar sugerencias AI
+                        </button>
+<button class="border border-outline/30 hover:bg-white/20 text-on-surface px-6 py-2 rounded-xl font-bold transition-all">Ver reporte detallado</button>
+</div>
+</div>
+<!-- Students Requiring Attention (Red Warning) -->
+<div class="col-span-12 lg:col-span-4 glass-card rounded-2xl p-container-padding shadow-sm border-error/20">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Atención Requerida</h3>
+</div>
+<span class="text-error font-bold text-headline-md">04</span>
+</div>
+<div class="space-y-4 max-h-[220px] overflow-y-auto custom-scrollbar pr-2">
+<!-- Student Item -->
+<div class="flex items-center justify-between p-3 bg-error-container/10 rounded-xl border border-error/10 hover:bg-error-container/20 transition-all cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up avatar of a teenage student with a neutral expression, high-quality lighting, soft shadows, part of a professional educational directory system. Minimalist aesthetic, soft blue tones in background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMWxbWBmo_8nP5SpOAFUTvNxes-XVeTq9iNqDrTFVygz0hUfHV90_004MFhT-Z8ahe9FjOmolzbklvl-m3-aQXTYFg6NYhGIDI5lmbdCLxMAUQ7VpBzQKbsVlAygLJDCcYOB3i8KdP3BJNa3xSFDEEDrfS0tBYxJzKlsjaVa-LwFn54L9J7qMXzbBuK0yVTPeoz7oUE77mLxyIlRP-WgFhUbUkAbKOxgSVXQ94VPeB4uV4DvZ6QM_Nv1lqXa1T4bxAYUM9gmLCRoE"/>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Mateo Jiménez</p>
+<p class="text-[11px] text-error font-bold uppercase">Riesgo de deserción</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</div>
+<!-- Student Item -->
+<div class="flex items-center justify-between p-3 bg-error-container/10 rounded-xl border border-error/10 hover:bg-error-container/20 transition-all cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up profile of a female student with glasses, studio lighting, clean background, 8k resolution, modern academic style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOW7qkTFEOXU9vcko3TIs48LmVYcFMsNyDrgroCycxjMHHd4OaYccStYnFZuAqMw-NtTaAJgw0ePqkNFulb0I7UHrB1kV3c1atDZzaqymsz2DkU3wUMZZcrHGdBl_INboDLGvZqudsQdKeu2D1bTMgMqKm-1UTM4UAa4K-TzC7tgsvWxrTF0j0DYH2cH2GjZb-QuMQAQDcosT52bhrS5J_8HIg31kHuF_QvEeyVDU36GO7RK_gTHxYsMt7prIfBRNiGrwprnO6qxQ"/>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Elena Sorolla</p>
+<p class="text-[11px] text-error font-bold uppercase">Bajo rendimiento</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</div>
+</div>
+<button class="w-full mt-6 text-primary font-bold text-label-md flex items-center justify-center gap-2 hover:underline">
+                        Gestionar todos los casos
+                        <span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
+</div>
+<!-- My Classrooms Header -->
+<div class="col-span-12 mt-8 mb-4">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface">Mis Aulas Activas</h3>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="p-2 rounded-lg bg-surface-container-low text-outline">
+<span class="material-symbols-outlined">list</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Classroom Cards -->
+<!-- Card 1 -->
+<div class="col-span-12 md:col-span-6 xl:col-span-4 glass-card rounded-2xl overflow-hidden shadow-sm group">
+<div class="h-3 bg-primary-container"></div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-headline-md text-on-surface">Sistemas I - 10B</h4>
+<p class="text-on-surface-variant font-label-md uppercase tracking-tighter">Facultad de Ingeniería</p>
+</div>
+<div class="p-2 bg-surface-container rounded-lg group-hover:bg-primary-container group-hover:text-on-primary-container transition-all">
+<span class="material-symbols-outlined">more_vert</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="p-3 bg-surface-container-low rounded-xl">
+<p class="text-[10px] text-outline uppercase font-bold">Asistencia</p>
+<p class="text-headline-md font-bold text-on-surface">92%</p>
+</div>
+<div class="p-3 bg-surface-container-low rounded-xl">
+<p class="text-[10px] text-outline uppercase font-bold">Progreso</p>
+<p class="text-headline-md font-bold text-primary">68%</p>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full mb-6 overflow-hidden">
+<div class="bg-primary-container h-full rounded-full transition-all duration-1000" style="width: 68%;"></div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-surface-container-highest hover:bg-primary-container hover:text-on-primary-container p-3 rounded-xl transition-all font-bold text-label-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">edit_note</span>
+                                Subir Notas
+                            </button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="col-span-12 md:col-span-6 xl:col-span-4 glass-card rounded-2xl overflow-hidden shadow-sm group">
+<div class="h-3 bg-on-primary-container"></div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-headline-md text-on-surface">Algoritmos - 09A</h4>
+<p class="text-on-surface-variant font-label-md uppercase tracking-tighter">Facultad de Ingeniería</p>
+</div>
+<div class="p-2 bg-surface-container rounded-lg group-hover:bg-primary-container transition-all">
+<span class="material-symbols-outlined">more_vert</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="p-3 bg-surface-container-low rounded-xl">
+<p class="text-[10px] text-outline uppercase font-bold">Asistencia</p>
+<p class="text-headline-md font-bold text-on-surface">85%</p>
+</div>
+<div class="p-3 bg-surface-container-low rounded-xl">
+<p class="text-[10px] text-outline uppercase font-bold">Progreso</p>
+<p class="text-headline-md font-bold text-primary">42%</p>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full mb-6 overflow-hidden">
+<div class="bg-primary-container h-full rounded-full transition-all duration-1000" style="width: 42%;"></div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-surface-container-highest hover:bg-primary-container hover:text-on-primary-container p-3 rounded-xl transition-all font-bold text-label-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">edit_note</span>
+                                Subir Notas
+                            </button>
+</div>
+</div>
+</div>
+<!-- Card 3 - Pipeline Access (Themed Primary) -->
+<div class="col-span-12 md:col-span-6 xl:col-span-4 bg-primary-container rounded-2xl p-6 shadow-xl relative overflow-hidden group cursor-pointer active:scale-95 transition-transform">
+
+<div class="relative z-10 h-full flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="w-14 h-14 bg-white/20 rounded-2xl backdrop-blur-md flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings: 'FILL' 1;">accessibility_new</span>
+</div>
+<span class="material-symbols-outlined text-white/60">north_east</span>
+</div>
+<div class="mt-8">
+<h4 class="font-headline-md text-white">Pipeline de Accesibilidad</h4>
+<p class="text-white/80 font-body-md mt-2">Gestiona adaptaciones curriculares y herramientas de soporte para estudiantes con necesidades especiales.</p>
+</div>
+<div class="mt-6 flex items-center gap-2 text-white font-bold text-label-md uppercase tracking-widest">
+                            Entrar al sistema
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Dynamic Floating Action (Contextual FAB) -->
+<button class="fixed bottom-10 right-10 w-16 h-16 bg-primary-container text-on-primary-container rounded-full shadow-2xl flex items-center justify-center z-50 hover:scale-110 active:scale-90 transition-all group overflow-hidden">
+<span class="material-symbols-outlined text-3xl group-hover:rotate-12 transition-transform">add</span>
+<div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</button>
+</main>
+<script>
+        // Micro-interactions and Lightweight Atmospheric Effects
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.getElementById('cursor-glow');
+            if (cursor) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            }
+        });
+
+        // Initialize progress bars animation
+        window.addEventListener('DOMContentLoaded', () => {
+            const bars = document.querySelectorAll('.bg-primary-container.h-full');
+            bars.forEach(bar => {
+                const targetWidth = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = targetWidth;
+                }, 300);
+            });
+        });
+    </script>
+</body></html>
