@@ -18,9 +18,7 @@ export type LoginDto = z.infer<typeof loginDtoSchema>;
 export const authUserSchema = z.object({
   id: z.string(),
   email: z.string().email(),
-  fullName: z.string(),
   role: roleSchema,
-  createdAt: z.string(),
 });
 export type AuthUser = z.infer<typeof authUserSchema>;
 
