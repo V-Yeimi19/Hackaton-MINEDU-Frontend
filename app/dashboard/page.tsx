@@ -11,12 +11,15 @@ export default async function DashboardIndexPage() {
     redirect(roleHomePath(user.role));
   }
 
+  if (user.role === "ADMIN" || user.role === "DIRECTIVO") {
+    redirect(roleHomePath(user.role));
+  }
+
   return (
     <GlassCard>
       <h1 className="text-headline-md text-on-surface">Próximamente</h1>
       <p className="mt-2 text-body-md text-on-surface-variant">
-        El panel para el rol {user.role} está en construcción. Por ahora, los flujos
-        completos disponibles son para Docente y Familiar.
+        El panel para el rol {user.role} está en construcción.
       </p>
     </GlassCard>
   );

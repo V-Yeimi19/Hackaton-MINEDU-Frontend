@@ -15,7 +15,7 @@ export default async function FamiliarLayout({ children }: { children: React.Rea
           href="/dashboard/familiar"
           className="font-medium text-on-surface hover:text-primary"
         >
-          Mis hijos
+          Mi(s) hij@(s)
         </Link>
       </nav>
       {children}

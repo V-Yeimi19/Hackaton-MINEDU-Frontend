@@ -11,7 +11,7 @@ export default async function FamiliarStudentsPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-headline-md text-on-surface">Mis hijos</h1>
+        <h1 className="text-headline-md text-on-surface">Mi(s) hij@(s)</h1>
         <Link href="/dashboard/familiar/students/new">
           <Button>Registrar hijo</Button>
         </Link>
@@ -20,7 +20,7 @@ export default async function FamiliarStudentsPage() {
       {children.length === 0 ? (
         <GlassCard>
           <p className="text-body-md text-on-surface-variant">
-            Aún no has registrado a ningún hijo. Regístralo para poder aceptar invitaciones de
+            Aún no has registrado a ningún hij@. Regístralo para poder aceptar invitaciones de
             aula y ver sus notas y asistencia.
           </p>
         </GlassCard>

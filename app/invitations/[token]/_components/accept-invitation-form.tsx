@@ -42,7 +42,7 @@ export function AcceptInvitationForm({
   if (students.length === 0) {
     return (
       <p className="text-body-md text-on-surface-variant">
-        Primero debes registrar a tu hijo antes de aceptar esta invitación.
+        Primero debes registrar a tu hij@ antes de aceptar esta invitación.
       </p>
     );
   }

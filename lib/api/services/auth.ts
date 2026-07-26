@@ -2,6 +2,7 @@ import { apiFetch } from "../http";
 import {
   authResponseSchema,
   authUserSchema,
+  changeRoleResponseSchema,
   type ChangeRoleDto,
   type LoginDto,
   type RegisterDto,
@@ -28,6 +29,6 @@ export function changeRole(authUserId: string, dto: ChangeRoleDto, token: string
     method: "PATCH",
     body: dto,
     token,
-    schema: authUserSchema,
+    schema: changeRoleResponseSchema,
   });
 }

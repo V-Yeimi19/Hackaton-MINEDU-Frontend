@@ -40,9 +40,6 @@ export default async function InvitationPage({
         <p className="mt-2 text-body-md text-on-surface-variant">
           Invitación para <strong>{invitation.email}</strong>
         </p>
-        <p className="mt-1 text-label-md text-on-surface-variant">
-          Estado: {invitation.status}
-        </p>
 
         <div className="mt-6">
           {invitation.status !== "PENDING" ? (

@@ -6,7 +6,9 @@ export function roleHomePath(role: SessionUser["role"]): string {
       return "/dashboard/docente";
     case "FAMILIAR":
       return "/dashboard/familiar";
+    case "ADMIN":
+      return "/dashboard/directivo";
     default:
-      return "/dashboard";
+      return "/dashboard/directivo";
   }
 }

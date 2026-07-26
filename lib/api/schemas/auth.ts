@@ -30,3 +30,10 @@ export type AuthResponse = z.infer<typeof authResponseSchema>;
 
 export const changeRoleDtoSchema = z.object({ role: roleSchema });
 export type ChangeRoleDto = z.infer<typeof changeRoleDtoSchema>;
+
+export const changeRoleResponseSchema = z.object({
+  id: z.string(),
+  email: z.string().email(),
+  role: roleSchema,
+});
+export type ChangeRoleResponse = z.infer<typeof changeRoleResponseSchema>;

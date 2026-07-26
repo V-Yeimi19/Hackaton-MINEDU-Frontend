@@ -39,21 +39,21 @@ export default function NewClassroomPage() {
       <h1 className="text-headline-md text-on-surface">Crear aula</h1>
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="name">Nombre del aula</Label>
+          <Label htmlFor="name">Grado</Label>
           <Input
             id="name"
             required
-            placeholder="1ro A"
+            placeholder="1ro Primaria"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="gradeLevel">Grado</Label>
+          <Label htmlFor="gradeLevel">Sección</Label>
           <Input
             id="gradeLevel"
             required
-            placeholder="1ro Primaria"
+            placeholder="A"
             value={gradeLevel}
             onChange={(e) => setGradeLevel(e.target.value)}
           />

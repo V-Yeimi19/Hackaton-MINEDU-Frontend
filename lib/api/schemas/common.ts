@@ -11,11 +11,13 @@ export const roleSchema = z.enum(ROLES);
 export function paginated<T extends z.ZodTypeAny>(item: T) {
   return z.object({
     items: z.array(item),
+    items: z.array(item),
     total: z.number(),
     page: z.number(),
     limit: z.number(),
   });
 }
+export type Paginated<T> = { items: T[]; total: number; page: number; limit: number };
 export type Paginated<T> = { items: T[]; total: number; page: number; limit: number };
 
 /**
