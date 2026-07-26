@@ -14,6 +14,24 @@ export default async function DocenteLayout({ children }: { children: React.Reac
         <Link href="/dashboard/docente" className="font-medium text-on-surface hover:text-primary">
           Mis aulas
         </Link>
+        <Link
+          href="/dashboard/docente/accessibility"
+          className="text-on-surface-variant hover:text-primary"
+        >
+          Accesibilidad
+        </Link>
+        <Link
+          href="/dashboard/docente/profile"
+          className="text-on-surface-variant hover:text-primary"
+        >
+          Mi perfil
+        </Link>
+        <Link
+          href="/dashboard/docente/invitations"
+          className="text-on-surface-variant hover:text-primary"
+        >
+          Mis invitaciones
+        </Link>
       </nav>
       {children}
     </div>

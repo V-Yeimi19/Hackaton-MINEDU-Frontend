@@ -309,7 +309,7 @@ Este es el servicio más grande. Contiene 10 sub-recursos.
 |--------|------|--------|------|----------|
 | `POST` | `/classrooms` | DOCENTE, ADMIN | `{ name, gradeLevel, institutionId? }` | `Classroom` |
 | `GET` | `/classrooms` | Todos los roles | — | `Classroom[]` (FAMILIAR: solo aulas de sus hijos) |
-| `GET` | `/classrooms/:id` | Todos los roles | — | `Classroom` con courses + enrollments |
+| `GET` | `/classrooms/:id` | Todos los roles | — | `Classroom` con courses + enrollments (ownership: DOCENTE→teacherId, FAMILIAR→enrollment) |
 | `PATCH` | `/classrooms/:id` | DOCENTE, ADMIN, DIRECTIVO | `{ name?, gradeLevel? }` | `Classroom` |
 | `DELETE` | `/classrooms/:id` | DOCENTE, ADMIN, DIRECTIVO | — | `{ deleted: true }` |
 | `GET` | `/classrooms/:id/enrollments` | DOCENTE, ADMIN, DIRECTIVO | — | `Enrollment[]` con student |
@@ -334,8 +334,8 @@ Este es el servicio más grande. Contiene 10 sub-recursos.
 | Método | Ruta | Acceso | Body | Response |
 |--------|------|--------|------|----------|
 | `POST` | `/courses` | DOCENTE, ADMIN | `{ name, classroomId }` | `Course` |
-| `GET` | `/courses` | DOCENTE, ADMIN, DIRECTIVO | — | `Course[]` |
-| `GET` | `/courses/:id` | DOCENTE, ADMIN, DIRECTIVO | — | `Course` con classroom |
+| `GET` | `/courses` | DOCENTE, ADMIN, DIRECTIVO, FAMILIAR | — | `Course[]` (FAMILIAR: solo cursos de aulas con hijos matriculados) |
+| `GET` | `/courses/:id` | DOCENTE, ADMIN, DIRECTIVO, FAMILIAR | — | `Course` con classroom (FAMILIAR: ownership via enrollment) |
 | `PATCH` | `/courses/:id` | DOCENTE, ADMIN | `{ name? }` | `Course` |
 | `DELETE` | `/courses/:id` | DOCENTE, ADMIN | — | `{ deleted: true }` |
 
@@ -448,9 +448,9 @@ Este es el servicio más grande. Contiene 10 sub-recursos.
 | Método | Ruta | Acceso | Body | Response |
 |--------|------|--------|------|----------|
 | `POST` | `/support-needs` | DOCENTE, ADMIN, FAMILIAR | `{ studentId, type, level?, description? }` | `StudentSupportNeed` |
-| `GET` | `/support-needs/student/:studentId` | Todos los roles | — | `StudentSupportNeed[]` |
-| `PATCH` | `/support-needs/:id` | DOCENTE, ADMIN | `{ type?, level?, description? }` | `StudentSupportNeed` |
-| `DELETE` | `/support-needs/:id` | ADMIN | — | `{ deleted: true }` |
+| `GET` | `/support-needs/student/:studentId` | Todos los roles | — | `StudentSupportNeed[]` (FAMILIAR: solo hijos propios) |
+| `PATCH` | `/support-needs/:id` | DOCENTE, ADMIN, FAMILIAR | `{ type?, level?, description? }` | `StudentSupportNeed` |
+| `DELETE` | `/support-needs/:id` | DOCENTE, ADMIN, FAMILIAR | — | `{ deleted: true }` |
 
 ```typescript
 // CreateSupportNeedDto
@@ -513,34 +513,39 @@ Este es el servicio más grande. Contiene 10 sub-recursos.
 
 | Método | Ruta | Acceso | Body | Response |
 |--------|------|--------|------|----------|
-| `POST` | `/invitations` | DOCENTE, DIRECTIVO | `{ email, type, classroomId?, institutionId? }` | `Invitation` |
-| `POST` | `/invitations/accept/teacher` | Público (sin JWT, pero requiere JWT) | `{ token }` | `InstitutionTeacher` + aulas importadas |
-| `POST` | `/invitations/accept/family` | FAMILIAR | `{ token, studentId }` | `Enrollment` |
+| `POST` | `/invitations/teacher` | DIRECTIVO | `{ email, institutionId }` | `Invitation` |
+| `POST` | `/invitations/family` | DOCENTE | `{ email, classroomId }` | `Invitation` |
+| `POST` | `/invitations/accept/teacher` | DOCENTE (JWT) | `{ token }` | `InstitutionTeacher` + aulas importadas |
+| `POST` | `/invitations/accept/family` | FAMILIAR (JWT) | `{ token, studentId }` | `Enrollment` |
 | `GET` | `/invitations/token/:token` | Público (sin JWT) | — | `Invitation` |
-| `GET` | `/invitations` | JWT | — | `Invitation[]` (propias) |
+| `GET` | `/invitations` | JWT | — | `Invitation[]` (creadas por el usuario) |
 | `PATCH` | `/invitations/:id/revoke` | Cualquier autenticado | — | `Invitation` (REVOKED) |
 
 **Flujo de invitación docente**:
 1. El docente se registra normalmente (`POST /auth/register` con rol `DOCENTE`) — tiene su cuenta propia.
-2. El DIRECTIVO crea la invitación (`POST /invitations` con `type: "TEACHER_TO_INSTITUTION"`).
+2. El DIRECTIVO crea la invitación (`POST /invitations/teacher`).
 3. Se envía email con link a `/invitations/{token}`.
 4. El docente abre el link → `GET /invitations/token/:token` muestra los detalles (público, sin JWT).
 5. El docente acepta con su JWT: `POST /invitations/accept/teacher` con `{ token }`. Se crea `InstitutionTeacher` y se importan sus aulas independientes a la IE.
 
 **Flujo de invitación familiar**:
 1. El FAMILIAR se registra y registra a sus hijos (`POST /students`).
-2. El DOCENTE crea la invitación (`POST /invitations` con `type: "FAMILY_TO_CLASSROOM"`).
+2. El DOCENTE crea la invitación (`POST /invitations/family`).
 3. Se envía email con link.
 4. El FAMILIAR abre el link → `GET /invitations/token/:token` (público).
 5. El FAMILIAR acepta con su JWT: `POST /invitations/accept/family` con `{ token, studentId }`. Se crea `Enrollment` para ese hijo.
 
 ```typescript
-// CreateInvitationDto
+// CreateTeacherInvitationDto (POST /invitations/teacher)
 {
   email: string;               // email del invitado
-  type: "TEACHER_TO_INSTITUTION" | "FAMILY_TO_CLASSROOM";
-  institutionId?: string;      // requerido si type = TEACHER_TO_INSTITUTION
-  classroomId?: string;        // requerido si type = FAMILY_TO_CLASSROOM
+  institutionId: string;       // institución a la que se invita
+}
+
+// CreateFamilyInvitationDto (POST /invitations/family)
+{
+  email: string;               // email del invitado
+  classroomId: string;         // aula a la que se invita
 }
 
 // Invitation
@@ -585,8 +590,8 @@ Protegidos con `InternalKeyGuard` (header `x-internal-key`). Usados por otros se
 | Método | Ruta | Acceso | Query | Response |
 |--------|------|--------|-------|----------|
 | `GET` | `/indicators/classroom/:classroomId` | DOCENTE, ADMIN, DIRECTIVO | `?page=&limit=` | `StudentIndicator[]` |
-| `GET` | `/indicators/student/:studentId/classroom/:classroomId` | Todos | — | `StudentIndicator` |
-| `GET` | `/indicators/student/:studentId` | Todos | `?page=&limit=` | `StudentIndicator[]` |
+| `GET` | `/indicators/student/:studentId/classroom/:classroomId` | Todos | — | `StudentIndicator` (FAMILIAR: ownership via Classroom internal) |
+| `GET` | `/indicators/student/:studentId` | Todos | `?page=&limit=` | `StudentIndicator[]` (FAMILIAR: ownership via Classroom internal) |
 
 ```typescript
 // StudentIndicator
@@ -608,7 +613,7 @@ Protegidos con `InternalKeyGuard` (header `x-internal-key`). Usados por otros se
 | Método | Ruta | Acceso | Response |
 |--------|------|--------|----------|
 | `GET` | `/digital-twin/classroom/:classroomId` | DOCENTE, ADMIN, DIRECTIVO | `ClassroomTwinResponse` |
-| `GET` | `/digital-twin/classroom/:classroomId/student/:studentId` | DOCENTE, ADMIN, DIRECTIVO | `StudentTwinSnapshot` |
+| `GET` | `/digital-twin/classroom/:classroomId/student/:studentId` | DOCENTE, ADMIN, DIRECTIVO, FAMILIAR | `StudentTwinSnapshot` (FAMILIAR: ownership via Classroom internal) |
 
 ```typescript
 // ClassroomTwinResponse
@@ -638,8 +643,8 @@ Protegidos con `InternalKeyGuard` (header `x-internal-key`). Usados por otros se
 | Método | Ruta | Acceso | Query | Response |
 |--------|------|--------|-------|----------|
 | `GET` | `/recommendations/classroom/:classroomId` | DOCENTE, ADMIN, DIRECTIVO | `?page=&limit=` | `Recommendation[]` |
-| `GET` | `/recommendations/student/:studentId` | Todos | `?page=&limit=` | `Recommendation[]` |
-| `PATCH` | `/recommendations/:id/dismiss` | DOCENTE, ADMIN, DIRECTIVO | — | `Recommendation` |
+| `GET` | `/recommendations/student/:studentId` | Todos | `?page=&limit=` | `Recommendation[]` (FAMILIAR: ownership via Classroom internal) |
+| `PATCH` | `/recommendations/:id/dismiss` | DOCENTE, ADMIN, DIRECTIVO | — | `Recommendation` (DOCENTE: ownership via Classroom internal) |
 
 ```typescript
 // Recommendation
@@ -945,6 +950,7 @@ Redis Pub/Sub. Los eventos se publican desde Classroom y Analytics reacciona.
 | Reports | Analytics | `GET /internal/recommendations/classroom/:id` | Recomendaciones |
 | Reports | Storage | `POST /internal/upload` | Subir CSV + PDF |
 | Accessibility | Classroom | `GET /internal/support-needs/student/:id` | Necesidades para ficha personalizada |
+| Analytics | Classroom | `GET /internal/students/familiar/:familiarId` | Verificar ownership FAMILIAR en endpoints por estudiante |
 
 ---
 
@@ -977,8 +983,8 @@ Redis Pub/Sub. Los eventos se publican desde Classroom y Analytics reacciona.
    → Institution
 
 3. El DIRECTIVO invita al docente:
-   POST /api/classroom/invitations
-   Body: { email: "docente@minedu.edu.pe", type: "TEACHER_TO_INSTITUTION", institutionId: "..." }
+   POST /api/classroom/invitations/teacher
+   Body: { email: "docente@minedu.edu.pe", institutionId: "..." }
    → Invitation { token: "abc123..." }
 
 4. → Se envía email automáticamente con link: /invitations/abc123...
