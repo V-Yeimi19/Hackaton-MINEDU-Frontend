@@ -25,20 +25,40 @@ export default async function FamiliarStudentsPage() {
           </p>
         </GlassCard>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {children.map((student) => (
-            <Link key={student.id} href={`/dashboard/familiar/students/${student.id}`}>
-              <GlassCard className="h-full transition-transform hover:-translate-y-1">
-                <h2 className="text-body-lg font-medium text-on-surface">{student.fullName}</h2>
-                <p className="mt-1 text-body-md text-on-surface-variant">
-                  {student.supportNeeds.length > 0
-                    ? `${student.supportNeeds.length} necesidad(es) de apoyo registrada(s)`
-                    : "Ver detalles"}
-                </p>
-              </GlassCard>
-            </Link>
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+            <GlassCard className="flex flex-col gap-1">
+              <span className="text-label-md uppercase tracking-wide text-on-surface-variant">
+                Hij@s registrados
+              </span>
+              <span className="text-headline-lg font-extrabold text-on-surface">
+                {children.length}
+              </span>
+            </GlassCard>
+            <GlassCard className="flex flex-col gap-1">
+              <span className="text-label-md uppercase tracking-wide text-on-surface-variant">
+                Necesidades de apoyo
+              </span>
+              <span className="text-headline-lg font-extrabold text-primary">
+                {children.reduce((sum, s) => sum + s.supportNeeds.length, 0)}
+              </span>
+            </GlassCard>
+          </div>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
+            {children.map((student) => (
+              <Link key={student.id} href={`/dashboard/familiar/students/${student.id}`}>
+                <GlassCard className="h-full transition-transform hover:-translate-y-1">
+                  <h2 className="text-body-lg font-medium text-on-surface">{student.fullName}</h2>
+                  <p className="mt-1 text-body-md text-on-surface-variant">
+                    {student.supportNeeds.length > 0
+                      ? `${student.supportNeeds.length} necesidad(es) de apoyo registrada(s)`
+                      : "Ver detalles"}
+                  </p>
+                </GlassCard>
+              </Link>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

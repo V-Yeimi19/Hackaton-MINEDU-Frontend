@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS, type NavItem } from "@/lib/auth/nav-config";
 import type { SessionUser } from "@/lib/api/token";
+import appIcon from "@/app/icon.png";
 
 // Pick the longest matching href as active so a parent route (e.g. the
 // role's home path) doesn't stay highlighted on every one of its sub-routes.
@@ -24,11 +25,18 @@ export function Sidebar({ role }: { role: SessionUser["role"] }) {
     <aside className="glass-ink fixed left-0 top-0 z-30 hidden h-full w-64 flex-col gap-2 rounded-none py-2 lg:flex">
       <div className="px-6 py-8">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-container">
-            <GraduationCap className="h-5 w-5 text-on-primary-container" />
+          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
+            <Image
+              src={appIcon}
+              alt="Aula Digital"
+              fill
+              priority
+              className="object-cover"
+              sizes="40px"
+            />
           </div>
           <div>
-            <h1 className="text-headline-md font-semibold text-inverse-on-surface">EduVision</h1>
+            <h1 className="text-headline-md font-semibold text-inverse-on-surface">Aula Digital</h1>
           </div>
         </div>
       </div>

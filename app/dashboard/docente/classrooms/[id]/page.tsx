@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { getServerToken } from "@/lib/api/token.server";
-import { classroomApi } from "@/lib/api";
+import { classroomApi, dashboardApi } from "@/lib/api";
 import { GlassCard } from "@/components/ui/glass-card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/form";
+import { CourseProgressForm } from "./_components/course-progress-form";
 import { CreateCourseForm } from "./_components/create-course-form";
 import { InviteFamilyForm } from "./_components/invite-family-form";
 import { AttendanceForm } from "./_components/attendance-form";
@@ -47,6 +49,17 @@ export default async function ClassroomDetailPage({
     )
   );
 
+  const [classroomProgress, courseProgress] = await Promise.all([
+    dashboardApi.progress.byClassroom(id, token).catch(() => null),
+    Promise.all(
+      classroom.courses.map((course) =>
+        dashboardApi.progress
+          .byCourse(course.id, token)
+          .catch(() => ({ courseId: course.id, totalUnits: 0, completedUnits: 0, percentage: 0 }))
+      )
+    ),
+  ]);
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -89,6 +102,36 @@ export default async function ClassroomDetailPage({
         <div className="mt-4">
           <CreateCourseForm classroomId={id} />
         </div>
+      </GlassCard>
+
+      <GlassCard>
+        <div className="flex items-center justify-between">
+          <h2 className="text-body-lg font-medium text-on-surface">Avance curricular</h2>
+          {classroomProgress && (
+            <Badge tone={classroomProgress.percentage >= 100 ? "primary" : "neutral"}>
+              {classroomProgress.percentage}% del aula
+            </Badge>
+          )}
+        </div>
+        <p className="mt-1 text-body-md text-on-surface-variant">
+          Registra cuántas unidades tiene cada curso y cuántas ya completaste.
+        </p>
+        {classroom.courses.length === 0 ? (
+          <p className="mt-3 text-body-md text-on-surface-variant">
+            Crea un curso primero para poder registrar su avance.
+          </p>
+        ) : (
+          <div className="mt-4 flex flex-col gap-3">
+            {classroom.courses.map((course, i) => (
+              <CourseProgressForm
+                key={course.id}
+                courseId={course.id}
+                courseName={course.name}
+                initialProgress={courseProgress[i]}
+              />
+            ))}
+          </div>
+        )}
       </GlassCard>
 
       <GlassCard>

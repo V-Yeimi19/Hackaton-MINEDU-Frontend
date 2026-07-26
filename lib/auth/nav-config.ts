@@ -3,6 +3,7 @@ import {
   Accessibility,
   Building2,
   GraduationCap,
+  LayoutDashboard,
   Mail,
   School,
   UserCircle,
@@ -25,6 +26,7 @@ export type NavItem = {
 
 export const NAV_ITEMS: Record<SessionUser["role"], NavItem[]> = {
   ADMIN: [
+    { href: "/dashboard/admin", label: "Resumen nacional", icon: LayoutDashboard },
     { href: "/dashboard/directivo", label: "Instituciones", icon: Building2 },
     { href: "/dashboard/admin/users", label: "Gestión de usuarios", icon: Users },
     { href: "/dashboard/directivo/profile", label: "Mi perfil", icon: UserCircle },

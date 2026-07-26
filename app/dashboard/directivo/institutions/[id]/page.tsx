@@ -1,5 +1,5 @@
 import { getServerToken } from "@/lib/api/token.server";
-import { classroomApi } from "@/lib/api";
+import { classroomApi, dashboardApi } from "@/lib/api";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -34,9 +34,10 @@ export default async function InstitutionDetailPage({
   const token = await getServerToken();
   if (!token) return null;
 
-  const [institution, allInvitations] = await Promise.all([
+  const [institution, allInvitations, summary] = await Promise.all([
     classroomApi.institutions.get(id, token),
     classroomApi.invitations.list(token),
+    dashboardApi.summary.institution(id, token).catch(() => null),
   ]);
 
   const invitations = allInvitations.filter((inv) => inv.institutionId === id);
@@ -57,6 +58,31 @@ export default async function InstitutionDetailPage({
           <DeleteInstitutionButton institutionId={id} />
         </div>
       </div>
+
+      {summary && (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <GlassCard className="flex flex-col gap-1">
+            <span className="text-label-md uppercase tracking-wide text-on-surface-variant">Aulas</span>
+            <span className="text-headline-lg font-extrabold text-on-surface">{summary.classroomCount}</span>
+          </GlassCard>
+          <GlassCard className="flex flex-col gap-1">
+            <span className="text-label-md uppercase tracking-wide text-on-surface-variant">Estudiantes</span>
+            <span className="text-headline-lg font-extrabold text-on-surface">{summary.studentCount}</span>
+          </GlassCard>
+          <GlassCard className="flex flex-col gap-1">
+            <span className="text-label-md uppercase tracking-wide text-on-surface-variant">Asistencia prom.</span>
+            <span className="text-headline-lg font-extrabold text-primary">
+              {Math.round(summary.avgAttendanceRate * 100)}%
+            </span>
+          </GlassCard>
+          <GlassCard className="flex flex-col gap-1">
+            <span className="text-label-md uppercase tracking-wide text-on-surface-variant">Nota prom.</span>
+            <span className="text-headline-lg font-extrabold text-primary">
+              {summary.avgGrade.toFixed(1)}
+            </span>
+          </GlassCard>
+        </div>
+      )}
 
       <GlassCard>
         <h2 className="text-body-lg font-medium text-on-surface">Editar institución</h2>
