@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, FieldError, Select } from "@/components/ui/form";
 import { classroomApi } from "@/lib/api";
 import { getClientToken } from "@/lib/api/token";
@@ -25,6 +25,26 @@ export function EvaluateCompetencyForm({
   const [error, setError] = useState<string>();
   const [success, setSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  // Ver el mismo comentario en grade-form.tsx: sin esto, un id vacío
+  // sobrevive a un router.refresh() que recién trae cursos/estudiantes.
+  useEffect(() => {
+    if (roster.length > 0 && !roster.some((r) => r.studentId === studentId)) {
+      setStudentId(roster[0].studentId);
+    }
+  }, [roster, studentId]);
+
+  useEffect(() => {
+    if (courses.length > 0 && !courses.some((c) => c.id === courseId)) {
+      setCourseId(courses[0].id);
+    }
+  }, [courses, courseId]);
+
+  useEffect(() => {
+    if (competencies.length > 0 && !competencies.some((c) => c.id === competencyId)) {
+      setCompetencyId(competencies[0].id);
+    }
+  }, [competencies, competencyId]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

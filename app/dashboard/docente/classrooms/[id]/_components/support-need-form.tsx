@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, FieldError, Input, Select } from "@/components/ui/form";
 import { classroomApi } from "@/lib/api";
 import { getClientToken } from "@/lib/api/token";
@@ -40,6 +40,15 @@ export function SupportNeedForm({
 }) {
   const [studentId, setStudentId] = useState(roster[0]?.studentId ?? "");
   const [type, setType] = useState<SupportNeedType>("TDAH");
+
+  // Ver el mismo comentario en grade-form.tsx: sin esto, un studentId vacío
+  // sobrevive a un router.refresh() que recién trae al primer estudiante matriculado.
+  useEffect(() => {
+    if (roster.length > 0 && !roster.some((r) => r.studentId === studentId)) {
+      setStudentId(roster[0].studentId);
+    }
+  }, [roster, studentId]);
+
   const [level, setLevel] = useState<SupportLevel>("MODERADO");
   const [description, setDescription] = useState("");
   const [error, setError] = useState<string>();

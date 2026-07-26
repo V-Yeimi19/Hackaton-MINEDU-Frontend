@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, FieldError, Input, Select } from "@/components/ui/form";
 import { classroomApi } from "@/lib/api";
 import { getClientToken } from "@/lib/api/token";
@@ -22,6 +22,23 @@ export function GradeForm({
   const [score, setScore] = useState("");
   const [error, setError] = useState<string>();
   const [submitting, setSubmitting] = useState(false);
+
+  // roster/courses pueden pasar de vacíos a tener datos sin que este
+  // componente se remonte (mismo GradeForm, nuevas props tras un
+  // router.refresh()) — el useState inicial no vuelve a evaluarse, así que
+  // sin este efecto el select queda con un id "" que ya no existe en la
+  // lista, y el submit manda un courseId/studentId vacío (400 "must be a UUID").
+  useEffect(() => {
+    if (roster.length > 0 && !roster.some((r) => r.studentId === studentId)) {
+      setStudentId(roster[0].studentId);
+    }
+  }, [roster, studentId]);
+
+  useEffect(() => {
+    if (courses.length > 0 && !courses.some((c) => c.id === courseId)) {
+      setCourseId(courses[0].id);
+    }
+  }, [courses, courseId]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
