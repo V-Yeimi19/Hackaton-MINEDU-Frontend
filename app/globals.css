@@ -1,26 +1,252 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------
+   Design tokens — sourced from docs/DESIGN.md ("Liquid Institutional")
+   --------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --surface: #f4fafc;
+  --surface-dim: #d5dbdd;
+  --surface-bright: #f4fafc;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #eff5f6;
+  --surface-container: #e9eff0;
+  --surface-container-high: #e3e9eb;
+  --surface-container-highest: #dde3e5;
+  --on-surface: #161d1e;
+  --on-surface-variant: #3c494c;
+  --inverse-surface: #2b3133;
+  --inverse-on-surface: #ecf2f3;
+  --outline: #6c797c;
+  --outline-variant: #bbc9cc;
+
+  --primary: #006876;
+  --on-primary: #ffffff;
+  --primary-container: #00bcd4;
+  --on-primary-container: #004650;
+  --inverse-primary: #44d8f1;
+
+  --secondary: #5f5e5e;
+  --on-secondary: #ffffff;
+  --secondary-container: #e2dfde;
+  --on-secondary-container: #636262;
+
+  --tertiary: #ba1a20;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #ff8980;
+  --on-tertiary-container: #85000d;
+
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+
+  --background: #f4fafc;
+  --on-background: #161d1e;
+  --surface-variant: #dde3e5;
+
+  /* Institutional "weight" surface — solid sidebar/nav anchor */
+  --ink: #1a1a1a;
 }
 
 @theme inline {
+  --color-surface: var(--surface);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-bright: var(--surface-bright);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-inverse-surface: var(--inverse-surface);
+  --color-inverse-on-surface: var(--inverse-on-surface);
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+  --color-inverse-primary: var(--inverse-primary);
+
+  --color-secondary: var(--secondary);
+  --color-on-secondary: var(--on-secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary-container: var(--on-secondary-container);
+
+  --color-tertiary: var(--tertiary);
+  --color-on-tertiary: var(--on-tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-on-tertiary-container: var(--on-tertiary-container);
+
+  --color-error: var(--error);
+  --color-on-error: var(--on-error);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-on-background: var(--on-background);
+  --color-surface-variant: var(--surface-variant);
+  --color-ink: var(--ink);
+
+  /* Typefaces */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+
+  /* Type scale */
+  --text-display-lg: 48px;
+  --text-display-lg--line-height: 1.2;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-lg--font-weight: 700;
+
+  --text-headline-lg: 32px;
+  --text-headline-lg--line-height: 1.3;
+  --text-headline-lg--font-weight: 600;
+
+  --text-headline-lg-mobile: 24px;
+  --text-headline-lg-mobile--line-height: 1.3;
+  --text-headline-lg-mobile--font-weight: 600;
+
+  --text-headline-md: 24px;
+  --text-headline-md--line-height: 1.4;
+  --text-headline-md--font-weight: 600;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.6;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.5;
+
+  --text-label-md: 14px;
+  --text-label-md--line-height: 1.2;
+  --text-label-md--letter-spacing: 0.05em;
+  --text-label-md--font-weight: 600;
+
+  /* Radius scale */
+  --radius-sm: 0.25rem;
+  --radius-DEFAULT: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/*
+ * DESIGN.md specifies a single "Liquid Institutional" light theme — no dark
+ * variant. Deliberately NOT following prefers-color-scheme: swapping only the
+ * surface/background tokens left every primary/secondary/tertiary "container"
+ * pairing (badges, chips) mismatched against their fixed on-*-container text,
+ * which is what caused the low-contrast badges. One consistent theme avoids
+ * re-deriving container pairs for a variant the design system never defined.
+ */
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--on-background);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* ---------------------------------------------------------------
+   Liquid Glass primitives — DESIGN.md's "deep acrylic" glassmorphism
+   layered with Apple-style specular highlights and multi-depth blur.
+   --------------------------------------------------------------- */
+@layer components {
+  .glass-surface {
+    position: relative;
+    isolation: isolate;
+    background: linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--surface-container-lowest) 78%, transparent),
+      color-mix(in srgb, var(--surface-container-lowest) 55%, transparent)
+    );
+    border: 1px solid color-mix(in srgb, white 45%, transparent);
+    box-shadow:
+      0 8px 32px 0 rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 0 color-mix(in srgb, white 60%, transparent);
+    backdrop-filter: blur(40px) saturate(160%);
+    -webkit-backdrop-filter: blur(40px) saturate(160%);
+  }
+
+  /* Specular highlight sweep — the "light-catching edge" of Liquid Glass */
+  .glass-surface::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      120deg,
+      color-mix(in srgb, white 90%, transparent) 0%,
+      color-mix(in srgb, white 10%, transparent) 30%,
+      transparent 55%,
+      color-mix(in srgb, white 25%, transparent) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .glass-surface > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Dark acrylic — for the institutional black sidebar/nav anchor */
+  .glass-ink {
+    position: relative;
+    isolation: isolate;
+    background: linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--ink) 92%, transparent),
+      color-mix(in srgb, var(--ink) 78%, transparent)
+    );
+    border: 1px solid color-mix(in srgb, white 12%, transparent);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.24);
+    backdrop-filter: blur(40px) saturate(140%);
+    -webkit-backdrop-filter: blur(40px) saturate(140%);
+    color: var(--inverse-on-surface, #ecf2f3);
+  }
+
+  .glass-ink::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      120deg,
+      color-mix(in srgb, white 30%, transparent) 0%,
+      transparent 40%,
+      transparent 60%,
+      color-mix(in srgb, white 10%, transparent) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Subtle ambient glow used behind hero glass panels */
+  .glass-ambient {
+    background:
+      radial-gradient(
+        60% 50% at 15% 10%,
+        color-mix(in srgb, var(--primary-container) 35%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        50% 40% at 90% 15%,
+        color-mix(in srgb, var(--tertiary-container) 22%, transparent),
+        transparent 70%
+      ),
+      var(--surface);
+  }
 }
